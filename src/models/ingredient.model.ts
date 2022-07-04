@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { mongooseConnect } from '../db/mongoose';
+import { mongooseConnect } from '../db/mongoose.js';
 
 async () => {
     await mongooseConnect();
@@ -22,4 +22,4 @@ ingredientSchema.set('toJSON', {
         delete returnedObject.__v;
     },
 });
-export const Recipe = mongoose.model('Recipe', ingredientSchema);
+export const Ingredient = mongoose.model('Ingredient', ingredientSchema);

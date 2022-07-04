@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { iTokenPayload } from '../interfaces/interfaces.models';
+import { iTokenPayload } from '../interfaces/interfaces.models.js';
 
 dotenv.config();
 

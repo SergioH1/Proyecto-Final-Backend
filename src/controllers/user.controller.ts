@@ -13,11 +13,7 @@ export class UserController<T> extends MongooseController<T> {
     getAllController = async (req: Request, resp: Response) => {
         req;
         resp.setHeader('Content-type', 'application/json');
-        resp.send(
-            await this.model.find().populate('robots', {
-                owner: 0,
-            })
-        );
+        resp.send(await this.model.find().populate('', {}));
     };
     getController = async (
         req: Request,
