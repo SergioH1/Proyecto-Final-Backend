@@ -8,7 +8,14 @@ async () => {
 const ingredientSchema = new mongoose.Schema({
     name: String,
     category: String,
-    amount: String,
+    recipes: [
+        {
+            recipe: {
+                type: mongoose.Types.ObjectId,
+                ref: 'Recipe',
+            },
+        },
+    ],
 });
 ingredientSchema.set('toJSON', {
     transform: (document, returnedObject) => {

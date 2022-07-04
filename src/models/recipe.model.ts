@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 import { mongooseConnect } from '../db/mongoose';
 
+export enum measure {
+    'g' = 'g',
+    'ml' = 'ml',
+    'unit' = 'unit',
+}
 async () => {
     await mongooseConnect();
 };
@@ -12,10 +17,16 @@ const recipeSchema = new mongoose.Schema({
     origin: String,
     content: String,
     img: String,
-    ingredients: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Ingredient',
-    },
+    ingredients: [
+        {
+            ingredient: {
+                type: mongoose.Types.ObjectId,
+                ref: 'Ingredient',
+            },
+            amount: Number,
+            measure: String,
+        },
+    ],
 });
 recipeSchema.set('toJSON', {
     transform: (document, returnedObject) => {

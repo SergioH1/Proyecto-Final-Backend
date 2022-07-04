@@ -11,8 +11,3 @@ export async function mongooseConnect() {
 
     return mongoose.connect(url as string);
 }
-
-export interface RelationField {
-    type: mongoose.Types.ObjectId;
-    ref: string;
-}
