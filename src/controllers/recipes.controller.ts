@@ -48,23 +48,20 @@ export class RecipesController<T> extends MongooseController<T> {
         }
     };
 
-    // patchOnlyIngredientController = async (req: Request, resp: Response) => {
-    //     let recipe: any;
-    //     recipe = await this.model.findById(req.params.id);
-    //     recipe.ingredients.push(req.body);
-    //     recipe.save();
-    //     resp.setHeader('Content-type', 'application/json');
-    //     resp.end(JSON.stringify(recipe));
-    //     resp.status(202);
-    // };
-    getFindByIngredient = async (
-        req: Request,
-        resp: Response
-        // next: NextFunction
-    ) => {
+    patchOnlyIngredientController = async (req: Request, resp: Response) => {
+        let recipe: any;
+        recipe = await this.model.findById(req.params.id);
+        recipe.ingredients.push(req.body);
+        recipe.save();
+        resp.setHeader('Content-type', 'application/json');
+        resp.end(JSON.stringify(recipe));
+        resp.status(202);
+    };
+    getFindByIngredient = async (req: Request, resp: Response) => {
         const recipes = await Recipe.find({
             ingredients: { $regex: req.query.q, $options: 'i' },
         });
+
         resp.setHeader('Content-type', 'application/json');
         resp.send(JSON.stringify(recipes));
     };

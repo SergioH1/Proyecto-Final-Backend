@@ -30,12 +30,13 @@ export class IngredientController<T> extends MongooseController<T> {
                 resp.end(JSON.stringify({}));
                 throw new Error('Id not found');
             }
-            result = await this.model.findById(req.params.id);
-            // .populate('recipes')
-            // .populate({
-            //     path: 'recipes',
-            //     populate: 'recipe',
-            // });
+            result = await this.model
+                .findById(req.params.id)
+                .populate('recipes')
+                .populate({
+                    path: 'recipes',
+                    populate: 'recipe',
+                });
 
             if (!result) {
                 resp.status(406);
