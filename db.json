@@ -1,13 +1,5 @@
 {
-    "title": "Pollo a la plancha",
-    "origin": "Asia",
-    "content": "",
-    "img": "https://www.recetasconpollo.org/wp-content/uploads/2019/12/filete-pechuga-pollo-plancha-.jpg",
-    "ingredients": [
-        {
-            "ingredient": "62c3ec220f971e4942ce0f48",
-            "amount": "3",
-            "measure": "pechugas"
-        }
-    ]
+    "ingredient": "62c3ee520f971e4942ce0f51",
+    "amount": "50",
+    "measure": "ml"
 }
