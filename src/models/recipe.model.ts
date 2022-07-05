@@ -6,25 +6,25 @@ export enum measure {
     'ml' = 'ml',
     'unit' = 'unit',
 }
-async () => {
-    await mongooseConnect();
-};
+
+await mongooseConnect();
+
 const recipeSchema = new mongoose.Schema({
     title: {
         type: mongoose.SchemaTypes.String,
         required: true,
     },
-    origin: String,
-    content: String,
-    img: String,
+    origin: mongoose.SchemaTypes.String,
+    content: mongoose.SchemaTypes.String,
+    img: mongoose.SchemaTypes.String,
     ingredients: [
         {
             ingredient: {
                 type: mongoose.Types.ObjectId,
                 ref: 'Ingredient',
             },
-            amount: Number,
-            measure: String,
+            amount: mongoose.SchemaTypes.Number,
+            measure: mongoose.SchemaTypes.String,
         },
     ],
 });

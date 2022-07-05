@@ -19,7 +19,7 @@ export interface iFood {
 export interface iIngredient {
     name: string;
     category: string;
-    recipes: Array<{ recipe: RelationField }>;
+    // recipes: Array<{ recipe: RelationField }>;
 }
 
 export interface iUser {}

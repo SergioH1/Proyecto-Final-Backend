@@ -1,21 +1,19 @@
 import mongoose from 'mongoose';
 import { mongooseConnect } from '../db/mongoose.js';
 
-async () => {
-    await mongooseConnect();
-};
+await mongooseConnect();
 
 const ingredientSchema = new mongoose.Schema({
-    name: String,
-    category: String,
-    recipes: [
-        {
-            recipe: {
-                type: mongoose.Types.ObjectId,
-                ref: 'Recipe',
-            },
-        },
-    ],
+    name: mongoose.SchemaTypes.String,
+    category: mongoose.SchemaTypes.String,
+    // recipes: [
+    //     {
+    //         recipe: {
+    //             type: mongoose.Types.ObjectId,
+    //             ref: 'Recipe',
+    //         },
+    //     },
+    // ],
 });
 ingredientSchema.set('toJSON', {
     transform: (document, returnedObject) => {
