@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Model } from 'mongoose';
+// import { iRecipe } from '../interfaces/interfaces.models.js';
 import { MongooseController } from './mongoose.controller.js';
 
 export class RecipesController<T> extends MongooseController<T> {
@@ -46,5 +47,14 @@ export class RecipesController<T> extends MongooseController<T> {
         } catch (err) {
             next(err);
         }
+    };
+    patchOnlyIngredientController = async (req: Request, resp: Response) => {
+        let recipe: any;
+        recipe = await this.model.findById(req.params.id);
+        recipe.ingredients.push(req.body);
+        recipe.save();
+        resp.setHeader('Content-type', 'application/json');
+        resp.end(JSON.stringify(recipe));
+        resp.status(202);
     };
 }

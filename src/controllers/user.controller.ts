@@ -1,19 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
-import { Model } from 'mongoose';
 
-import { MongooseController } from './mongoose.controller.js';
 import * as aut from '../services/authorization.js';
-import { iTokenPayload } from '../interfaces/interfaces.models.js';
+import { iTokenPayload, iUser } from '../interfaces/interfaces.models.js';
+import { User } from '../models/user.model.js';
 
-export class UserController<T> extends MongooseController<T> {
-    constructor(public model: Model<T>) {
-        super(model);
-    }
+export class UserController {
+    User: iUser | undefined;
+    constructor() {}
 
     getAllController = async (req: Request, resp: Response) => {
         req;
         resp.setHeader('Content-type', 'application/json');
-        resp.send(await this.model.find().populate('', {}));
+        resp.send(await User.find().populate('', {}));
     };
     getController = async (
         req: Request,
@@ -28,11 +26,9 @@ export class UserController<T> extends MongooseController<T> {
                 resp.end(JSON.stringify({}));
                 throw new Error('Id not found');
             }
-            result = await this.model
-                .findById(req.params.id)
-                .populate('robots', {
-                    owner: 0,
-                });
+            result = await User.findById(req.params.id).populate('robots', {
+                owner: 0,
+            });
             if (!result) {
                 resp.status(406);
                 resp.end(JSON.stringify({}));
@@ -53,7 +49,7 @@ export class UserController<T> extends MongooseController<T> {
     ) => {
         try {
             req.body.passwd = await aut.encrypt(req.body.passwd, 10);
-            const newItem = await this.model.create(req.body);
+            const newItem = await User.create(req.body);
             if (!newItem) throw new Error('error');
 
             resp.setHeader('Content-type', 'application/json');
@@ -64,12 +60,13 @@ export class UserController<T> extends MongooseController<T> {
             return;
         }
     };
+
     loginController = async (
         req: Request,
         resp: Response,
         next: NextFunction
     ) => {
-        const findUser: any = await this.model.findOne({
+        const findUser: any = await User.findOne({
             name: req.body.name,
         });
         if (
@@ -89,5 +86,20 @@ export class UserController<T> extends MongooseController<T> {
         resp.status(201);
         resp.setHeader('Content-type', 'application/json');
         resp.send(JSON.stringify({ token, id: findUser.id }));
+    };
+    patchController = async (
+        req: Request,
+        resp: Response,
+        next: NextFunction
+    ) => {
+        const newItem = await User.findByIdAndUpdate(req.params.id, req.body);
+        if (!newItem || req.body.email) {
+            const error = new Error('Invalid user');
+            error.name = 'UserError';
+            next(error);
+            return;
+        }
+        resp.setHeader('Content-type', 'application/json');
+        resp.send(JSON.stringify(newItem));
     };
 }
