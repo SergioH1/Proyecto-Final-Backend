@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema({
         },
     ],
     avatar: String,
-    phone: String,
 });
 
 userSchema.set('toJSON', {

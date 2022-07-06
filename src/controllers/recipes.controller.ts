@@ -13,9 +13,10 @@ export class RecipesController<T> extends MongooseController<T> {
         req;
         resp.setHeader('Content-type', 'application/json');
         resp.send(
-            await this.model.find()
-            // .populate('ingredients')
-            // .populate({ path: 'ingredients', populate: 'ingredient' })
+            await this.model
+                .find()
+                .populate('ingredients')
+                .populate({ path: 'ingredients', populate: 'ingredient' })
         );
     };
     getController = async (
@@ -31,9 +32,10 @@ export class RecipesController<T> extends MongooseController<T> {
                 resp.end(JSON.stringify({}));
                 throw new Error('Id not found');
             }
-            result = await this.model.findById(req.params.id);
-            // .populate('ingredients')
-            // .populate({ path: 'ingredients', populate: 'ingredient' });
+            result = await this.model
+                .findById(req.params.id)
+                .populate('ingredients')
+                .populate({ path: 'ingredients', populate: 'ingredient' });
 
             if (!result) {
                 resp.status(406);
@@ -52,6 +54,15 @@ export class RecipesController<T> extends MongooseController<T> {
         let recipe: any;
         recipe = await this.model.findById(req.params.id);
         recipe.ingredients.push(req.body);
+        recipe.save();
+        resp.setHeader('Content-type', 'application/json');
+        resp.end(JSON.stringify(recipe));
+        resp.status(202);
+    };
+    patchOnlyKeywordController = async (req: Request, resp: Response) => {
+        let recipe: any;
+        recipe = await this.model.findById(req.params.id);
+        recipe.keywords.push(req.body);
         recipe.save();
         resp.setHeader('Content-type', 'application/json');
         resp.end(JSON.stringify(recipe));

@@ -9,13 +9,7 @@ export class IngredientController<T> extends MongooseController<T> {
     getAllController = async (req: Request, resp: Response) => {
         req;
         resp.setHeader('Content-type', 'application/json');
-        resp.send(
-            await this.model.find()
-            // .populate('recipes').populate({
-            //     path: 'recipes',
-            //     populate: 'recipe',
-            // })
-        );
+        resp.send(await this.model.find());
     };
     getController = async (
         req: Request,
@@ -30,13 +24,7 @@ export class IngredientController<T> extends MongooseController<T> {
                 resp.end(JSON.stringify({}));
                 throw new Error('Id not found');
             }
-            result = await this.model
-                .findById(req.params.id)
-                .populate('recipes')
-                .populate({
-                    path: 'recipes',
-                    populate: 'recipe',
-                });
+            result = await this.model.findById(req.params.id);
 
             if (!result) {
                 resp.status(406);

@@ -13,6 +13,10 @@ recipeRouter.patch(
     '/addIngredient/:id',
     recipeController.patchOnlyIngredientController
 );
+recipeRouter.patch(
+    '/addKeywords/:id',
+    recipeController.patchOnlyKeywordController
+);
 recipeRouter.patch('/:id', recipeController.patchController);
 
 recipeRouter.delete('/:id', recipeController.deleteController);
