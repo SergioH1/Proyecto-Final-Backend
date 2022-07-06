@@ -1,44 +1,40 @@
 import { NextFunction, Request, Response } from 'express';
 
 import * as aut from '../services/authorization.js';
-import { iTokenPayload, iUser } from '../interfaces/interfaces.models.js';
+import {
+    iTokenPayload,
+    RelationField,
+} from '../interfaces/interfaces.models.js';
 import { User } from '../models/user.model.js';
+import { HydratedDocument } from 'mongoose';
 
+export interface iUser {
+    id?: string;
+    Username: string;
+    email: string;
+    password: string;
+    avatar: string;
+    recipes: Array<RelationField>;
+}
 export class UserController {
-    User: iUser | undefined;
-    constructor() {}
-
-    getAllController = async (req: Request, resp: Response) => {
-        req;
-        resp.setHeader('Content-type', 'application/json');
-        resp.send(await User.find().populate('', {}));
-    };
     getController = async (
         req: Request,
         resp: Response,
         next: NextFunction
     ) => {
-        let result;
+        resp.setHeader('Content-type', 'application/json');
+        let user;
         try {
-            resp.setHeader('Content-type', 'application/json');
-            if (req.params.id.length !== 24) {
-                resp.status(404);
-                resp.end(JSON.stringify({}));
-                throw new Error('Id not found');
-            }
-            result = await User.findById(req.params.id).populate('robots', {
-                owner: 0,
-            });
-            if (!result) {
-                resp.status(406);
-                resp.end(JSON.stringify({}));
-
-                throw new Error('Id not found');
-            } else {
-                resp.end(JSON.stringify(result));
-            }
-        } catch (err) {
-            next(err);
+            user = await User.findById(req.params.id).populate('recipes');
+        } catch (error) {
+            next(error);
+            return;
+        }
+        if (user) {
+            resp.send(JSON.stringify(user));
+        } else {
+            resp.status(404);
+            resp.send(JSON.stringify({}));
         }
     };
 
@@ -47,18 +43,17 @@ export class UserController {
         resp: Response,
         next: NextFunction
     ) => {
+        let newUser: HydratedDocument<any>;
         try {
-            req.body.passwd = await aut.encrypt(req.body.passwd, 10);
-            const newItem = await User.create(req.body);
-            if (!newItem) throw new Error('error');
-
-            resp.setHeader('Content-type', 'application/json');
-            resp.status(201);
-            resp.end(JSON.stringify(newItem));
+            req.body.password = await aut.encrypt(req.body.password);
+            newUser = await User.create(req.body);
         } catch (error) {
             next(error);
             return;
         }
+        resp.setHeader('Content-type', 'application/json');
+        resp.status(201);
+        resp.send(JSON.stringify(newUser));
     };
 
     loginController = async (
@@ -66,27 +61,43 @@ export class UserController {
         resp: Response,
         next: NextFunction
     ) => {
-        const findUser: any = await User.findOne({
-            name: req.body.name,
-        });
+        const findUser: any = await User.findOne({ name: req.body.name });
+        console.log(findUser);
         if (
             !findUser ||
-            !(await aut.compare(req.body.passwd, findUser.passwd))
+            !(await aut.compare(req.body.password, findUser.password))
         ) {
             const error = new Error('Invalid user or password');
             error.name = 'UserAuthorizationError';
             next(error);
+
             return;
         }
         const tokenPayLoad: iTokenPayload = {
             id: findUser.id,
             name: findUser.name,
         };
+
         const token = aut.createToken(tokenPayLoad);
-        resp.status(201);
         resp.setHeader('Content-type', 'application/json');
+        resp.status(201);
         resp.send(JSON.stringify({ token, id: findUser.id }));
     };
+
+    deleteController = async (
+        req: Request,
+        resp: Response,
+        next: NextFunction
+    ) => {
+        try {
+            const deletedItem = await User.findByIdAndDelete(req.params.id);
+            resp.status(202);
+            resp.send(JSON.stringify(deletedItem));
+        } catch (error) {
+            next(error);
+        }
+    };
+
     patchController = async (
         req: Request,
         resp: Response,

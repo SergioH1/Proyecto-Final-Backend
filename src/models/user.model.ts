@@ -4,8 +4,16 @@ import { mongooseConnect } from '../db/mongoose.js';
 await mongooseConnect();
 
 const userSchema = new mongoose.Schema({
-    Username: { type: mongoose.SchemaTypes.String, required: true },
-    email: mongoose.SchemaTypes.String,
+    Username: {
+        type: mongoose.SchemaTypes.String,
+        required: true,
+        unique: true,
+    },
+    email: {
+        type: mongoose.SchemaTypes.String,
+        required: true,
+        unique: true,
+    },
     passwd: { type: mongoose.SchemaTypes.String, required: true },
     recipes: [
         {
