@@ -7,7 +7,9 @@ export enum measure {
     'unit' = 'unit',
 }
 
-await mongooseConnect();
+(async () => {
+    await mongooseConnect();
+})();
 
 const recipeSchema = new mongoose.Schema({
     title: {
