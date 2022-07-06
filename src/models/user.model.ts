@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import { mongooseConnect } from '../db/mongoose.js';
 
-await mongooseConnect();
+(async () => {
+    await mongooseConnect();
+})();
 
 const userSchema = new mongoose.Schema({
     Username: {
@@ -23,10 +25,11 @@ const userSchema = new mongoose.Schema({
     ],
     avatar: String,
 });
-
 userSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         delete returnedObject.__v;
+        delete returnedObject.passwd;
     },
 });
+
 export const User = mongoose.model('User', userSchema);

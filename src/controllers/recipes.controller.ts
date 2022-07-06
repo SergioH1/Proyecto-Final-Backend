@@ -53,7 +53,7 @@ export class RecipesController<T> extends MongooseController<T> {
     patchOnlyIngredientController = async (req: Request, resp: Response) => {
         let recipe: any;
         recipe = await this.model.findById(req.params.id);
-        console.log(recipe);
+
         recipe.ingredients.push(req.body);
         recipe.save();
         resp.setHeader('Content-type', 'application/json');

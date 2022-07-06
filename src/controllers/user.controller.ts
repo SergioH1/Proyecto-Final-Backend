@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import * as aut from '../services/authorization.js';
 import {
+    ExtRequest,
     iTokenPayload,
     RelationField,
 } from '../interfaces/interfaces.models.js';
@@ -45,7 +46,7 @@ export class UserController {
     ) => {
         let newUser: HydratedDocument<any>;
         try {
-            req.body.password = await aut.encrypt(req.body.password);
+            req.body.passwd = await aut.encrypt(req.body.passwd);
             newUser = await User.create(req.body);
         } catch (error) {
             next(error);
@@ -62,10 +63,10 @@ export class UserController {
         next: NextFunction
     ) => {
         const findUser: any = await User.findOne({ name: req.body.name });
-        console.log(findUser);
+
         if (
             !findUser ||
-            !(await aut.compare(req.body.password, findUser.password))
+            !(await aut.compare(req.body.passwd, findUser.passwd))
         ) {
             const error = new Error('Invalid user or password');
             error.name = 'UserAuthorizationError';
@@ -79,6 +80,7 @@ export class UserController {
         };
 
         const token = aut.createToken(tokenPayLoad);
+
         resp.setHeader('Content-type', 'application/json');
         resp.status(201);
         resp.send(JSON.stringify({ token, id: findUser.id }));
@@ -90,9 +92,13 @@ export class UserController {
         next: NextFunction
     ) => {
         try {
-            const deletedItem = await User.findByIdAndDelete(req.params.id);
-            resp.status(202);
-            resp.send(JSON.stringify(deletedItem));
+            const userId = (req as unknown as ExtRequest).tokenPayload.id;
+            const findUser = await User.findById(req.params.id);
+            if (String(userId) === String(findUser?._id)) {
+                const deletedItem = await User.findByIdAndDelete(req.params.id);
+                resp.status(202);
+                resp.send(JSON.stringify(deletedItem));
+            }
         } catch (error) {
             next(error);
         }

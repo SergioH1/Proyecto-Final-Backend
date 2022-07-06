@@ -101,4 +101,18 @@ describe('Given a instantiated Controller Recipes Controller', () => {
             expect(resp.status).toHaveBeenCalledWith(202);
         });
     });
+    describe('When metodhod patchOnlykeywordController is called', () => {
+        test('them in success resp.status with 202', async () => {
+            mockModel.findById = jest.fn().mockResolvedValue({
+                keywords: ['pollo'],
+                save: jest.fn(),
+            });
+
+            await controller.patchOnlyKeywordController(
+                req as Request,
+                resp as Response
+            );
+            expect(resp.status).toHaveBeenCalledWith(202);
+        });
+    });
 });
