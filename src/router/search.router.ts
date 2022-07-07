@@ -5,4 +5,4 @@ export const searchController = new SearchController();
 
 export const searchRouter = Router();
 
-searchRouter.get('/', searchController.getAllController);
+searchRouter.get('/', searchController.getFindByIngredient);

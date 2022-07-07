@@ -3,7 +3,7 @@ import { Recipe } from '../models/recipe.model.js';
 export class SearchController {
     getFindByIngredient = async (req: Request, resp: Response) => {
         const recipes = await Recipe.find({
-            ingredients: { $regex: req.query.q, $options: 'i' },
+            keywords: { $regex: req.query.q, $options: 'i' },
         });
 
         resp.setHeader('Content-type', 'application/json');
