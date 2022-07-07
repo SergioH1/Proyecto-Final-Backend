@@ -6,7 +6,6 @@ export const recipeController = new RecipesController(Recipe);
 export const recipeRouter = Router();
 
 recipeRouter.get('/', recipeController.getAllController);
-recipeRouter.get('/search', recipeController.getFindByIngredient);
 recipeRouter.get('/:id', recipeController.getController);
 recipeRouter.post('/', recipeController.postController);
 recipeRouter.patch(

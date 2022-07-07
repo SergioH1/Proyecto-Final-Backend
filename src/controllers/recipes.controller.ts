@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Model } from 'mongoose';
-import { Recipe } from '../models/recipe.model.js';
+
 // import { iRecipe } from '../interfaces/interfaces.models.js';
 import { MongooseController } from './mongoose.controller.js';
 
@@ -68,13 +68,5 @@ export class RecipesController<T> extends MongooseController<T> {
         resp.setHeader('Content-type', 'application/json');
         resp.end(JSON.stringify(recipe));
         resp.status(202);
-    };
-    getFindByIngredient = async (req: Request, resp: Response) => {
-        const recipes = await Recipe.find({
-            ingredients: { $regex: req.query.q, $options: 'i' },
-        });
-
-        resp.setHeader('Content-type', 'application/json');
-        resp.send(JSON.stringify(recipes));
     };
 }

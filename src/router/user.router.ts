@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller.js';
 import { userRequiredForChanges } from '../middlewares/user-required.js';
-import { loginRequired } from '../middlewares/login-required.js';
+import { loginRequired } from '../middlewares/login.required.js';
 export const userController = new UserController();
 
 export const userRouter = Router();
