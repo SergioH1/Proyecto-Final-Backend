@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import * as aut from '../services/authorization.js';
 import {
+    ExtRequest,
     iTokenPayload,
     RelationField,
 } from '../interfaces/interfaces.models.js';
@@ -30,6 +31,7 @@ export class UserController {
             next(error);
             return;
         }
+
         if (user) {
             resp.send(JSON.stringify(user));
         } else {
@@ -45,7 +47,7 @@ export class UserController {
     ) => {
         let newUser: HydratedDocument<any>;
         try {
-            req.body.password = await aut.encrypt(req.body.password);
+            req.body.passwd = await aut.encrypt(req.body.passwd);
             newUser = await User.create(req.body);
         } catch (error) {
             next(error);
@@ -62,10 +64,10 @@ export class UserController {
         next: NextFunction
     ) => {
         const findUser: any = await User.findOne({ name: req.body.name });
-        console.log(findUser);
+
         if (
             !findUser ||
-            !(await aut.compare(req.body.password, findUser.password))
+            !(await aut.compare(req.body.passwd, findUser.passwd))
         ) {
             const error = new Error('Invalid user or password');
             error.name = 'UserAuthorizationError';
@@ -79,6 +81,7 @@ export class UserController {
         };
 
         const token = aut.createToken(tokenPayLoad);
+
         resp.setHeader('Content-type', 'application/json');
         resp.status(201);
         resp.send(JSON.stringify({ token, id: findUser.id }));
@@ -90,11 +93,14 @@ export class UserController {
         next: NextFunction
     ) => {
         try {
-            const deletedItem = await User.findByIdAndDelete(req.params.id);
+            const deletedItem = await User.findByIdAndDelete(
+                (req as unknown as ExtRequest).tokenPayload.id
+            );
             resp.status(202);
             resp.send(JSON.stringify(deletedItem));
         } catch (error) {
             next(error);
+            return;
         }
     };
 
@@ -103,14 +109,22 @@ export class UserController {
         resp: Response,
         next: NextFunction
     ) => {
-        const newItem = await User.findByIdAndUpdate(req.params.id, req.body);
-        if (!newItem || req.body.email) {
-            const error = new Error('Invalid user');
-            error.name = 'UserError';
+        try {
+            const newItem = await User.findByIdAndUpdate(
+                (req as unknown as ExtRequest).tokenPayload.id,
+                req.body
+            );
+
+            if (!newItem || req.body.email) {
+                const error = new Error('Invalid user');
+                error.name = 'UserError';
+                next(error);
+                return;
+            }
+            resp.setHeader('Content-type', 'application/json');
+            resp.send(JSON.stringify(newItem));
+        } catch (error) {
             next(error);
-            return;
         }
-        resp.setHeader('Content-type', 'application/json');
-        resp.send(JSON.stringify(newItem));
     };
 }
