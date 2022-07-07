@@ -27,6 +27,9 @@ describe('Given a instantiated Controller Recipes Controller', () => {
         req = {
             params: { id: '62b5d4943bc55ff0124f6c1d' },
             body: [{ ingredient: 'alga' }],
+            query: {
+                q: 'algo',
+            },
         };
         resp = {
             setHeader: jest.fn(),

@@ -14,11 +14,6 @@ export class IngredientController extends MongooseController {
         let result;
         try {
             resp.setHeader('Content-type', 'application/json');
-            if (req.params.id.length !== 24) {
-                resp.status(404);
-                resp.end(JSON.stringify({}));
-                throw new Error('Id not found');
-            }
             result = await this.model.findById(req.params.id);
             if (!result) {
                 resp.status(406);
