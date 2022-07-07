@@ -154,7 +154,44 @@ describe('Given a instantiated controller Usercontroller', () => {
             expect(resp.status).toHaveBeenCalled();
         });
     });
-    describe('When method patchController is called', () => {
-        second;
+
+    describe('When the method patchcontroller', () => {
+        test('them resp.send function is called', async () => {
+            (req as Partial<ExtRequest>) = {
+                params: { id: '123456789012345678901234' },
+                tokenPayload: { _id: '21331' },
+                body: { name: 'sergio' },
+            };
+            const findUser = '21331';
+            User.findByIdAndUpdate = jest.fn().mockResolvedValue(findUser);
+            await controller.patchController(
+                req as Request,
+                resp as Response,
+                next as NextFunction
+            );
+            expect(resp.send).toHaveBeenCalled();
+        });
+        test('Them next function is called ', async () => {
+            await controller.patchController(
+                req as Request,
+                resp as Response,
+                next as NextFunction
+            );
+            expect(next).toHaveBeenCalled();
+        });
+        test('Them resp.end function is called ', async () => {
+            (req as Partial<ExtRequest>) = {
+                params: { id: '123456789012345678901234' },
+                tokenPayload: { _id: '21331' },
+                body: { email: 'sergio@gafjoa.com', name: 'sergio' },
+            };
+
+            await controller.patchController(
+                req as Request,
+                resp as Response,
+                next as NextFunction
+            );
+            expect(next).toHaveBeenCalled();
+        });
     });
 });

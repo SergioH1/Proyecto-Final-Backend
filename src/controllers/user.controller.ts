@@ -31,6 +31,7 @@ export class UserController {
             next(error);
             return;
         }
+
         if (user) {
             resp.send(JSON.stringify(user));
         } else {
@@ -92,15 +93,14 @@ export class UserController {
         next: NextFunction
     ) => {
         try {
-            const userId = (req as unknown as ExtRequest).tokenPayload.id;
-            const findUser = await User.findById(req.params.id);
-            if (String(userId) === String(findUser?._id)) {
-                const deletedItem = await User.findByIdAndDelete(req.params.id);
-                resp.status(202);
-                resp.send(JSON.stringify(deletedItem));
-            }
+            const deletedItem = await User.findByIdAndDelete(
+                (req as unknown as ExtRequest).tokenPayload.id
+            );
+            resp.status(202);
+            resp.send(JSON.stringify(deletedItem));
         } catch (error) {
             next(error);
+            return;
         }
     };
 
@@ -109,14 +109,22 @@ export class UserController {
         resp: Response,
         next: NextFunction
     ) => {
-        const newItem = await User.findByIdAndUpdate(req.params.id, req.body);
-        if (!newItem || req.body.email) {
-            const error = new Error('Invalid user');
-            error.name = 'UserError';
+        try {
+            const newItem = await User.findByIdAndUpdate(
+                (req as unknown as ExtRequest).tokenPayload.id,
+                req.body
+            );
+
+            if (!newItem || req.body.email) {
+                const error = new Error('Invalid user');
+                error.name = 'UserError';
+                next(error);
+                return;
+            }
+            resp.setHeader('Content-type', 'application/json');
+            resp.send(JSON.stringify(newItem));
+        } catch (error) {
             next(error);
-            return;
         }
-        resp.setHeader('Content-type', 'application/json');
-        resp.send(JSON.stringify(newItem));
     };
 }

@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     recipes: [
         {
             type: mongoose.Types.ObjectId,
-            ref: 'Recipes',
+            ref: 'Recipe',
         },
     ],
     avatar: String,
