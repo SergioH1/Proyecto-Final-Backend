@@ -26,11 +26,21 @@ describe('Given the routes of "/ingredients', () => {
         });
     });
     describe('When method GET is used in "/:id" route', () => {
-        test('If I am not logged, then status should be 401', async () => {
+        test(', then status should be 200', async () => {
             const response = await request(app).get(
                 `/ingredients/${data.ingredients[0].id}`
             );
             expect(response.statusCode).toBe(200);
+        });
+        test(' then status should be 400', async () => {
+            const response = await request(app).get(`/ingredients/123`);
+            expect(response.statusCode).toBe(422);
+        });
+        test(' then status should be 400', async () => {
+            const response = await request(app).get(
+                `/ingredients/123456789012345678901234`
+            );
+            expect(response.statusCode).toBe(406);
         });
     });
 });

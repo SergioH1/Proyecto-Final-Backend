@@ -32,6 +32,34 @@ describe('Given the routes of "/ingredients', () => {
             expect(response.statusCode).toBe(404);
         });
     });
+    describe('When method patch is used ', () => {
+        test('If i am loged Them status should be 401', async () => {
+            const changes = {};
+            const response = await request(app)
+                .patch(`/user/${data.users[1].id}`)
+                .set('Authorization', 'Bearer ' + token)
+                .send(changes);
+            expect(response.statusCode).toBe(401);
+        });
+    });
+    test('If i am not loged Them status should be a 202', async () => {
+        const changes = {};
+        const response = await request(app)
+            .patch(`/user/${data.users[1].id}`)
+
+            .send(changes);
+        expect(response.statusCode).toBe(401);
+    });
+    test('If i am loged Them status should be a 202', async () => {
+        const user = {
+            avatar: 'afhauufhahsf',
+        };
+        const response = await request(app)
+            .patch(`/user/${data.users[0].id}`)
+            .set('Authorization', 'Bearer ' + token)
+            .send(user);
+        expect(response.statusCode).toBe(200);
+    });
     describe('When method GET is used in "/:id" route', () => {
         test(' then status should be 200', async () => {
             const response = await request(app).get(
@@ -93,18 +121,6 @@ describe('Given the routes of "/ingredients', () => {
             const response = await request(app).post(`/user/login`).send(user);
 
             expect(response.statusCode).toBe(201);
-        });
-    });
-    describe('When method patch is used ', () => {
-        test('If i am loged Them status should be a 202', async () => {
-            const changes = {
-                avatar: 'grdfbd',
-            };
-            const response = await request(app)
-                .patch(`/user/${data.users[0].id}`)
-                .set('Authorization', 'Bearer ' + token)
-                .send(changes);
-            expect(response.statusCode).toBe(202);
         });
     });
 });
