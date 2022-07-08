@@ -2,27 +2,26 @@ import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
-import { measure } from '../models/recipe.model';
-
 export interface iRecipe {
+    id?: string;
     title: string;
     origin: string;
     content: string;
     img: string;
     ingredients: Array<iFood>;
+    keyword: Array<string>;
 }
 export interface iFood {
-    ingredient: RelationField;
+    ingredient: RelationField | null;
     amount: number;
-    measure: measure;
+    measure: string;
 }
 export interface iIngredient {
+    id?: string;
     name: string;
     category: string;
     // recipes: Array<{ recipe: RelationField }>;
 }
-
-export interface iUser {}
 
 export interface ExtRequest extends Request {
     tokenPayload: JwtPayload; // iTokenPayload;

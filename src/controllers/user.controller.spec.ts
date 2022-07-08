@@ -111,23 +111,23 @@ describe('Given a instantiated controller Usercontroller', () => {
             );
             expect(next).toHaveBeenCalled();
         });
-        test('Then next function should be called', async () => {
-            req = {
-                body: {
-                    password: '5451542',
-                    name: 'Sergio',
-                },
-            };
-            (aut.compare as jest.Mock).mockResolvedValue(true);
-            (aut.createToken as jest.Mock).mockResolvedValue('');
-            User.findOne = jest.fn().mockReturnValue({ name: req.body.name });
-            await controller.loginController(
-                req as Request,
-                resp as Response,
-                next as NextFunction
-            );
-            expect(resp.send).toHaveBeenCalled();
-        });
+    });
+    test('Then next function should be called', async () => {
+        req = {
+            body: {
+                password: '5451542',
+                name: 'Sergio',
+            },
+        };
+        (aut.compare as jest.Mock).mockResolvedValue(true);
+        (aut.createToken as jest.Mock).mockResolvedValue('');
+        User.findOne = jest.fn().mockReturnValue({ name: req.body.name });
+        await controller.loginController(
+            req as Request,
+            resp as Response,
+            next as NextFunction
+        );
+        expect(resp.send).toHaveBeenCalled();
     });
     describe('When method delete controller is called', () => {
         test('Them next is called', async () => {
@@ -179,19 +179,19 @@ describe('Given a instantiated controller Usercontroller', () => {
             );
             expect(next).toHaveBeenCalled();
         });
-        test('Them resp.end function is called ', async () => {
-            (req as Partial<ExtRequest>) = {
-                params: { id: '123456789012345678901234' },
-                tokenPayload: { _id: '21331' },
-                body: { email: 'sergio@gafjoa.com', name: 'sergio' },
-            };
+    });
+    test('Them resp.end function is called ', async () => {
+        (req as Partial<ExtRequest>) = {
+            params: { id: '123456789012345678901234' },
+            tokenPayload: { _id: '21331' },
+            body: { email: 'sergio@gafjoa.com', name: 'sergio' },
+        };
 
-            await controller.patchController(
-                req as Request,
-                resp as Response,
-                next as NextFunction
-            );
-            expect(next).toHaveBeenCalled();
-        });
+        await controller.patchController(
+            req as Request,
+            resp as Response,
+            next as NextFunction
+        );
+        expect(next).toHaveBeenCalled();
     });
 });

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-
+/* istanbul ignore file */
 import * as aut from '../services/authorization.js';
 import {
     ExtRequest,
@@ -13,9 +13,9 @@ export interface iUser {
     id?: string;
     Username: string;
     email: string;
-    password: string;
+    passwd: string;
     avatar: string;
-    recipes: Array<RelationField>;
+    recipes?: Array<RelationField | null>;
 }
 export class UserController {
     getController = async (

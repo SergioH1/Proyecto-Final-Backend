@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 import { mongooseConnect } from '../db/mongoose.js';
-await mongooseConnect();
+/* istanbul ignore file */
+(async () => {
+    await mongooseConnect();
+})();
 const ingredientSchema = new mongoose.Schema({
     name: mongoose.SchemaTypes.String,
     category: mongoose.SchemaTypes.String,

@@ -79,19 +79,19 @@ describe('Given a instantiated controller Usercontroller', () => {
             await controller.loginController(req, resp, next);
             expect(next).toHaveBeenCalled();
         });
-        test('Then next function should be called', async () => {
-            req = {
-                body: {
-                    password: '5451542',
-                    name: 'Sergio',
-                },
-            };
-            aut.compare.mockResolvedValue(true);
-            aut.createToken.mockResolvedValue('');
-            User.findOne = jest.fn().mockReturnValue({ name: req.body.name });
-            await controller.loginController(req, resp, next);
-            expect(resp.send).toHaveBeenCalled();
-        });
+    });
+    test('Then next function should be called', async () => {
+        req = {
+            body: {
+                password: '5451542',
+                name: 'Sergio',
+            },
+        };
+        aut.compare.mockResolvedValue(true);
+        aut.createToken.mockResolvedValue('');
+        User.findOne = jest.fn().mockReturnValue({ name: req.body.name });
+        await controller.loginController(req, resp, next);
+        expect(resp.send).toHaveBeenCalled();
     });
     describe('When method delete controller is called', () => {
         test('Them next is called', async () => {
@@ -125,14 +125,14 @@ describe('Given a instantiated controller Usercontroller', () => {
             await controller.patchController(req, resp, next);
             expect(next).toHaveBeenCalled();
         });
-        test('Them resp.end function is called ', async () => {
-            req = {
-                params: { id: '123456789012345678901234' },
-                tokenPayload: { _id: '21331' },
-                body: { email: 'sergio@gafjoa.com', name: 'sergio' },
-            };
-            await controller.patchController(req, resp, next);
-            expect(next).toHaveBeenCalled();
-        });
+    });
+    test('Them resp.end function is called ', async () => {
+        req = {
+            params: { id: '123456789012345678901234' },
+            tokenPayload: { _id: '21331' },
+            body: { email: 'sergio@gafjoa.com', name: 'sergio' },
+        };
+        await controller.patchController(req, resp, next);
+        expect(next).toHaveBeenCalled();
     });
 });

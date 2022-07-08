@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { mongooseConnect } from '../db/mongoose.js';
+/* istanbul ignore file */
 (async () => {
     await mongooseConnect();
 })();

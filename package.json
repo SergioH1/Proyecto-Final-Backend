@@ -7,7 +7,7 @@
     "scripts": {
         "start": "tsc --watch",
         "start:build": "cross-env PORT=3700 nodemon ./dist/index.js",
-        "test": " jest --watchAll --coverage --passWithNoTests",
+        "test": " jest ",
         "prepare": "husky install"
     },
     "author": "",
