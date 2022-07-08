@@ -79,7 +79,7 @@ describe('Given a instantiated Controller Recipes Controller', () => {
     describe('When metodhod patchOnlykeywordController is called', () => {
         test('them in success resp.status with 202', async () => {
             mockModel.findById = jest.fn().mockResolvedValue({
-                keywords: ['pollo'],
+                keyword: ['pollo'],
                 save: jest.fn(),
             });
             await controller.patchOnlyKeywordController(req, resp);

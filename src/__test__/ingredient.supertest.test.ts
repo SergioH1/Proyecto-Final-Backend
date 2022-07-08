@@ -12,7 +12,6 @@ describe('Given the routes of "/ingredients', () => {
         // eslint-disable-next-line no-unused-vars
         connect = await mongooseConnect();
         data = await initDB();
-        console.log(data);
     });
 
     afterAll(async () => {

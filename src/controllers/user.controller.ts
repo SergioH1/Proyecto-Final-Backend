@@ -11,7 +11,7 @@ import { HydratedDocument } from 'mongoose';
 
 export interface iUser {
     id?: string;
-    Username: string;
+    userName: string;
     email: string;
     passwd: string;
     avatar: string;
@@ -63,7 +63,9 @@ export class UserController {
         resp: Response,
         next: NextFunction
     ) => {
-        const findUser: any = await User.findOne({ name: req.body.name });
+        const findUser: any = await User.findOne({
+            userName: req.body.userName,
+        });
 
         if (
             !findUser ||
@@ -77,7 +79,7 @@ export class UserController {
         }
         const tokenPayLoad: iTokenPayload = {
             id: findUser.id,
-            name: findUser.name,
+            userName: findUser.Username,
         };
 
         const token = aut.createToken(tokenPayLoad);

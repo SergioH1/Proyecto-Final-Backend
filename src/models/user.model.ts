@@ -1,20 +1,13 @@
 import mongoose from 'mongoose';
 import { mongooseConnect } from '../db/mongoose.js';
 
-import { RelationField } from '../interfaces/interfaces.models.js';
 /* istanbul ignore file */
 (async () => {
     await mongooseConnect();
 })();
-export interface iUser {
-    Username: string;
-    email: string;
-    passwd: string;
-    recipes: Array<RelationField> | null;
-    avatar: string;
-}
+
 const userSchema = new mongoose.Schema({
-    Username: {
+    userName: {
         type: mongoose.SchemaTypes.String,
         required: true,
 

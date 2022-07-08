@@ -12,7 +12,7 @@ export interface iRecipe {
     keyword: Array<string>;
 }
 export interface iFood {
-    ingredient: RelationField | null;
+    ingredient: RelationField;
     amount: number;
     measure: string;
 }
@@ -29,7 +29,7 @@ export interface ExtRequest extends Request {
 
 export interface iTokenPayload extends JwtPayload {
     id: string;
-    name: string;
+    userName: string;
 }
 export interface RelationField {
     type: mongoose.Types.ObjectId;

@@ -35,7 +35,9 @@ export class UserController {
         resp.send(JSON.stringify(newUser));
     };
     loginController = async (req, resp, next) => {
-        const findUser = await User.findOne({ name: req.body.name });
+        const findUser = await User.findOne({
+            userName: req.body.userName,
+        });
         if (!findUser ||
             !(await aut.compare(req.body.passwd, findUser.passwd))) {
             const error = new Error('Invalid user or password');
@@ -45,7 +47,7 @@ export class UserController {
         }
         const tokenPayLoad = {
             id: findUser.id,
-            name: findUser.name,
+            userName: findUser.Username,
         };
         const token = aut.createToken(tokenPayLoad);
         resp.setHeader('Content-type', 'application/json');

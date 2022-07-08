@@ -9,14 +9,14 @@ import { encrypt } from '../services/authorization';
 
 let aUsers: Array<iUser> = [
     {
-        Username: 'Sergio',
+        userName: 'Sergio',
         email: 'sergioh@gmail.com',
         passwd: '1254',
         avatar: 'String',
         recipes: [],
     },
     {
-        Username: 'Ango',
+        userName: 'Ango',
         email: 'anguitoh@gmail.com',
         passwd: '1254',
         avatar: 'String',
@@ -54,7 +54,6 @@ const aRecipes: Array<iRecipe> = [
     },
 ];
 
-console.log({ aRecipes });
 export const initDB = async () => {
     User.collection.drop();
     Recipe.collection.drop();
