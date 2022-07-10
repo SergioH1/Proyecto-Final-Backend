@@ -22,3 +22,8 @@ userRouter.patch(
     userRequiredForChanges,
     userController.patchController
 );
+userRouter.patch(
+    '/addrecipes',
+    userRequiredForChanges,
+    userController.addRecipesController
+);

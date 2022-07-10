@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import * as aut from '../services/authorization.js';
 import { User } from '../models/user.model.js';
 export class UserController {
@@ -79,6 +78,29 @@ export class UserController {
         }
         catch (error) {
             next(error);
+        }
+    };
+    addRecipesController = async (req, resp, next) => {
+        const idRecipes = req.params.id;
+        const { id } = req.tokenPayload;
+        const findUser = (await User.findOne({
+            id,
+        }));
+        if (findUser === null || findUser === undefined) {
+            next('UserError');
+            return;
+        }
+        if (findUser.recipes.some((item) => item.toString() === idRecipes)) {
+            const error = new Error('Recipes already added to favorites');
+            error.name = 'ValidationError';
+            next(error);
+        }
+        else {
+            findUser.recipes.push(idRecipes);
+            findUser.save();
+            resp.setHeader('Content-type', 'application/json');
+            resp.status(201);
+            resp.send(JSON.stringify(findUser));
         }
     };
 }

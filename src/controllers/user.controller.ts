@@ -1,11 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-/* istanbul ignore file */
+
 import * as aut from '../services/authorization.js';
-import {
-    ExtRequest,
-    iTokenPayload,
-    RelationField,
-} from '../interfaces/interfaces.models.js';
+import { ExtRequest, iTokenPayload } from '../interfaces/interfaces.models.js';
 import { User } from '../models/user.model.js';
 import { HydratedDocument } from 'mongoose';
 
@@ -15,7 +11,7 @@ export interface iUser {
     email: string;
     passwd: string;
     avatar: string;
-    recipes?: Array<RelationField | null>;
+    recipes?: Array<string>;
 }
 export class UserController {
     getController = async (
@@ -127,6 +123,38 @@ export class UserController {
             resp.send(JSON.stringify(newItem));
         } catch (error) {
             next(error);
+        }
+    };
+    addRecipesController = async (
+        req: Request,
+        resp: Response,
+        next: NextFunction
+    ) => {
+        const idRecipes = req.params.id;
+        const { id } = (req as ExtRequest).tokenPayload;
+
+        const findUser: HydratedDocument<iUser> = (await User.findOne({
+            id,
+        })) as HydratedDocument<iUser>;
+
+        if (findUser === null || findUser === undefined) {
+            next('UserError');
+            return;
+        }
+        if (
+            (findUser.recipes as Array<any>).some(
+                (item) => item.toString() === idRecipes
+            )
+        ) {
+            const error = new Error('Recipes already added to favorites');
+            error.name = 'ValidationError';
+            next(error);
+        } else {
+            (findUser.recipes as Array<any>).push(idRecipes);
+            findUser.save();
+            resp.setHeader('Content-type', 'application/json');
+            resp.status(201);
+            resp.send(JSON.stringify(findUser));
         }
     };
 }

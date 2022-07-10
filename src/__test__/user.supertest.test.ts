@@ -43,9 +43,11 @@ describe('Given the routes of "/ingredients', () => {
         });
     });
     test('If i am not loged Them status should be a 202', async () => {
-        const changes = {};
+        const changes = {
+            avatar: 'asfas',
+        };
         const response = await request(app)
-            .patch(`/user/${data.users[1].id}`)
+            .patch(`/user/${data.users[0].id}`)
 
             .send(changes);
         expect(response.statusCode).toBe(401);
