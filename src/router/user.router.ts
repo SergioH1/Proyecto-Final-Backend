@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller.js';
-import { userRequiredForChanges } from '../middlewares/user-required.js';
+import { userRequiredForChanges } from '../middlewares/user.required.js';
 import { loginRequired } from '../middlewares/login.required.js';
 export const userController = new UserController();
 
@@ -21,4 +21,9 @@ userRouter.patch(
     loginRequired,
     userRequiredForChanges,
     userController.patchController
+);
+userRouter.patch(
+    '/addrecipes',
+    userRequiredForChanges,
+    userController.addRecipesController
 );

@@ -34,7 +34,9 @@ export class UserController {
         resp.send(JSON.stringify(newUser));
     };
     loginController = async (req, resp, next) => {
-        const findUser = await User.findOne({ name: req.body.name });
+        const findUser = await User.findOne({
+            userName: req.body.userName,
+        });
         if (!findUser ||
             !(await aut.compare(req.body.passwd, findUser.passwd))) {
             const error = new Error('Invalid user or password');
@@ -44,7 +46,7 @@ export class UserController {
         }
         const tokenPayLoad = {
             id: findUser.id,
-            name: findUser.name,
+            userName: findUser.Username,
         };
         const token = aut.createToken(tokenPayLoad);
         resp.setHeader('Content-type', 'application/json');
@@ -76,6 +78,29 @@ export class UserController {
         }
         catch (error) {
             next(error);
+        }
+    };
+    addRecipesController = async (req, resp, next) => {
+        const idRecipes = req.params.id;
+        const { id } = req.tokenPayload;
+        const findUser = (await User.findOne({
+            id,
+        }));
+        if (findUser === null || findUser === undefined) {
+            next('UserError');
+            return;
+        }
+        if (findUser.recipes.some((item) => item.toString() === idRecipes)) {
+            const error = new Error('Recipes already added to favorites');
+            error.name = 'ValidationError';
+            next(error);
+        }
+        else {
+            findUser.recipes.push(idRecipes);
+            findUser.save();
+            resp.setHeader('Content-type', 'application/json');
+            resp.status(201);
+            resp.send(JSON.stringify(findUser));
         }
     };
 }

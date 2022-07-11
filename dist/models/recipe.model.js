@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { mongooseConnect } from '../db/mongoose.js';
+/* istanbul ignore file */
 export var measure;
 (function (measure) {
     measure["g"] = "g";
@@ -39,22 +40,29 @@ export const Recipe = mongoose.model('Recipe', recipeSchema);
 export function insertManyRecipe() {
     Recipe.insertMany([
         {
-            title: 'Pollo Seco',
-            origin: 'Global',
-            content: 'En un tazón , mezcla el ajo picado, la salsa de soja, las escamas de chille, el aceite de oliva y la miel. Coloca las pechugas en un bol o en una bolsa, vierte el adobo sobre el pollo cubriéndolo bien y si utilizas la bolsa muévelo hasta que se impregne bien. Deja marinar en el frigorífico al menos 1 hora o incluso toda la noche' +
-                'Coloca una sartén al fuego con un poquito de aceite. Dora las pechugas a fuego alto 2 min por cada lado.' +
-                'Baja el fuego a suave, tapa la sartén y cocina otros 10 min. Acuérdate de reducir los tiempos si tus pechugas son más pequeñas.' +
-                'Aparta del fuego y deja reposar tapado otros 7 min' +
-                'Retira la tapa, deja enfriar 5 min para no quemarte y ya puedes partirlo en láminas o en tiras a modo de carne mechada. Guárdalo en un recipiente hermético en la nevera. ',
-            img: 'https://www.recetasconpollo.org/wp-content/uploads/2019/12/filete-pechuga-pollo-plancha--512x341.jpg',
+            title: 'Pollo al horno con cerveza',
+            origin: 'Spain',
+            content: 'Pelamos y cortamos las patatas en rodajas no muy finas. De en torno a 1/2 dedo de grosor.' +
+                'Pelamos también la cebolla y la cortamos en juliana es decir, en tiras finas' +
+                'En una bandeja de horno ponemos como base la patata para nuestro pollo a la cerveza al horno. Que cubra el fondo por completo. Encima colocamos la cebolla de tal manera que también quede bien distribuida por toda la patata. Salpimentamos ambos ingredientes' +
+                'Sobre esta base de cebolla y patata, ponemos los muslos de pollo boca abajo. Es decir, con la parte «más fea» para arriba. Después les daremos la vuelta y así, ya quedarán directamente bien presentados' +
+                'Regamos el pollo con una lata de cerveza -recuerda que puedes utilizar la que más te guste. Cuanto más fuerte sea, más amargor dará- Salpimentamos y añadimos un poco de romero seco y de tomillo seco. Finalmente regamos con un poco de aceite de oliva' +
+                'ntroducimos nuestro pollo a la cerveza en el horno previamente calentado a 200ºC, calor arriba y abajo. Dejamos que se cocine aquí en torno a unos 25 minutos. Hasta que coja color' +
+                'Pasado el tiempo, sacamos la bandeja del horno. Volvemos a salpimentar la otra cara y a echar un poco de romero y tomillo secos. Introducimos al horno de nuevo, otros 25 minutos, hasta que los muslos del pollo estén bien cocinados y la patata, blandita',
+            img: 'https://cdn.mytaste.org/i?u=group2%2FM00%2FE8%2FD3%2FCgAINlxkMq2AFefjAAoyKj8EIGg449.jpg',
             ingredients: [
                 {
                     ingredient: '62c3ec220f971e4942ce0f48',
-                    amount: 3,
-                    measure: 'pechugas',
+                    amount: 4,
+                    measure: 'muslos',
+                },
+                {
+                    ingredient: '62c831aba903bfcdbb1c7198',
+                    amount: 1,
+                    measure: 'lata',
                 },
             ],
-            keywords: ['Pollo'],
+            keywords: ['Pollo', 'Cerveza'],
         },
     ])
         .then(function () {

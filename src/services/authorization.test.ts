@@ -31,7 +31,7 @@ describe('When the function compare is called', () => {
 describe('When the function createToken is called', () => {
     test('them it should jwt.sing is called', async () => {
         jwt.sign = jest.fn();
-        await createToken({ id: 'r', name: '3' });
+        await createToken({ id: 'r', userName: '3' });
         expect(jwt.sign).toBeCalled();
     });
 });
