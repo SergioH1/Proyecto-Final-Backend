@@ -20,7 +20,6 @@ export interface iIngredient {
     id?: string;
     name: string;
     category: string;
-    // recipes: Array<{ recipe: RelationField }>;
 }
 
 export interface ExtRequest extends Request {

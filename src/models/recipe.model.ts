@@ -66,7 +66,7 @@ export function insertManyRecipe() {
                     measure: 'lata',
                 },
             ],
-            keywords: ['Pollo', 'Cerveza'],
+            keywords: ['Cerveza'],
         },
     ])
         .then(function () {
