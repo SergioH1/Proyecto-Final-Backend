@@ -4,7 +4,7 @@ const errors = {
     UserError: 404,
     UserAuthorizationError: 401,
     TokenError: 401,
-    RangeError: 600,
+    RangeError: 505,
 };
 export const errorControl = (error, req, resp, next) => {
     req;

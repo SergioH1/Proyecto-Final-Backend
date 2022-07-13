@@ -3,11 +3,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 export const encrypt = async (source, salt = 10) => {
-    if (source) {
-        return await bcrypt.hash(source, salt); // encrytar
-    }
-    else
-        return;
+    return await bcrypt.hash(source, salt); // encrytar
 };
 export const compare = async (value, hash) => {
     return await bcrypt.compare(value, hash);

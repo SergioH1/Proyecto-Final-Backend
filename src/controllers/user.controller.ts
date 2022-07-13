@@ -46,6 +46,7 @@ export class UserController {
             req.body.password = await aut.encrypt(req.body.password);
             newUser = await User.create(req.body);
         } catch (error) {
+            console.log(error);
             next(RangeError);
             return;
         }

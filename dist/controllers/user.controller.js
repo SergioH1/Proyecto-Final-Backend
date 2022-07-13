@@ -26,6 +26,7 @@ export class UserController {
             newUser = await User.create(req.body);
         }
         catch (error) {
+            console.log(error);
             next(RangeError);
             return;
         }
