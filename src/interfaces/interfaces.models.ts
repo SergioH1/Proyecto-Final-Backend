@@ -11,6 +11,14 @@ export interface iRecipe {
     ingredients: Array<iFood>;
     keyword: Array<string>;
 }
+export interface iUser {
+    id?: string;
+    userName: string;
+    email: string;
+    password: string;
+    avatar: string;
+    recipes?: Array<string>;
+}
 export interface iFood {
     ingredient: RelationField;
     amount: number;

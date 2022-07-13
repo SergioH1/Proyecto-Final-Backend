@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 export class SearchController {
     getFindByIngredient = async (req: Request, resp: Response) => {
         let { q } = req.query as any;
-
+        q;
         let recipes: Array<mongoose.Document> = [];
         if (typeof q !== 'string' && q !== undefined) {
             for await (const [index, value] of q.entries()) {
@@ -22,7 +22,8 @@ export class SearchController {
         } else {
             recipes = await Recipe.find({
                 keywords: {
-                    $in: [q],
+                    $regex: q,
+                    $options: 'i',
                 },
             });
         }

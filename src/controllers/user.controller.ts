@@ -9,7 +9,7 @@ export interface iUser {
     id?: string;
     userName: string;
     email: string;
-    passwd: string;
+    password: string;
     avatar: string;
     recipes?: Array<string>;
 }
@@ -43,10 +43,10 @@ export class UserController {
     ) => {
         let newUser: HydratedDocument<any>;
         try {
-            req.body.passwd = await aut.encrypt(req.body.passwd);
+            req.body.password = await aut.encrypt(req.body.password);
             newUser = await User.create(req.body);
         } catch (error) {
-            next(error);
+            next(RangeError);
             return;
         }
         resp.setHeader('Content-type', 'application/json');
@@ -60,12 +60,12 @@ export class UserController {
         next: NextFunction
     ) => {
         const findUser: any = await User.findOne({
-            userName: req.body.userName,
+            email: req.body.email,
         });
 
         if (
             !findUser ||
-            !(await aut.compare(req.body.passwd, findUser.passwd))
+            !(await aut.compare(req.body.password, findUser.password))
         ) {
             const error = new Error('Invalid user or password');
             error.name = 'UserAuthorizationError';
@@ -125,36 +125,36 @@ export class UserController {
             next(error);
         }
     };
-    addRecipesController = async (
-        req: Request,
-        resp: Response,
-        next: NextFunction
-    ) => {
-        const idRecipes = req.params.id;
-        const { id } = (req as ExtRequest).tokenPayload;
+    // addRecipesController = async (
+    //     req: Request,
+    //     resp: Response,
+    //     next: NextFunction
+    // ) => {
+    //     const idRecipes = req.params.id;
+    //     const { id } = (req as ExtRequest).tokenPayload;
 
-        const findUser: HydratedDocument<iUser> = (await User.findOne({
-            id,
-        })) as HydratedDocument<iUser>;
+    //     const findUser: HydratedDocument<iUser> = (await User.findOne({
+    //         id,
+    //     })) as HydratedDocument<iUser>;
 
-        if (findUser === null || findUser === undefined) {
-            next('UserError');
-            return;
-        }
-        if (
-            (findUser.recipes as Array<any>).some(
-                (item) => item.toString() === idRecipes
-            )
-        ) {
-            const error = new Error('Recipes already added to favorites');
-            error.name = 'ValidationError';
-            next(error);
-        } else {
-            (findUser.recipes as Array<any>).push(idRecipes);
-            findUser.save();
-            resp.setHeader('Content-type', 'application/json');
-            resp.status(201);
-            resp.send(JSON.stringify(findUser));
-        }
-    };
+    //     if (findUser === null || findUser === undefined) {
+    //         next('UserError');
+    //         return;
+    //     }
+    //     if (
+    //         (findUser.recipes as Array<any>).some(
+    //             (item) => item.toString() === idRecipes
+    //         )
+    //     ) {
+    //         const error = new Error('Recipes already added to favorites');
+    //         error.name = 'ValidationError';
+    //         next(error);
+    //     } else {
+    //         (findUser.recipes as Array<any>).push(idRecipes);
+    //         findUser.save();
+    //         resp.setHeader('Content-type', 'application/json');
+    //         resp.status(201);
+    //         resp.send(JSON.stringify(findUser));
+    //     }
+    // };
 }

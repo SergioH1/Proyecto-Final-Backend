@@ -22,11 +22,11 @@ export class UserController {
     postController = async (req, resp, next) => {
         let newUser;
         try {
-            req.body.passwd = await aut.encrypt(req.body.passwd);
+            req.body.password = await aut.encrypt(req.body.password);
             newUser = await User.create(req.body);
         }
         catch (error) {
-            next(error);
+            next(RangeError);
             return;
         }
         resp.setHeader('Content-type', 'application/json');
@@ -35,10 +35,10 @@ export class UserController {
     };
     loginController = async (req, resp, next) => {
         const findUser = await User.findOne({
-            userName: req.body.userName,
+            email: req.body.email,
         });
         if (!findUser ||
-            !(await aut.compare(req.body.passwd, findUser.passwd))) {
+            !(await aut.compare(req.body.password, findUser.password))) {
             const error = new Error('Invalid user or password');
             error.name = 'UserAuthorizationError';
             next(error);
@@ -78,29 +78,6 @@ export class UserController {
         }
         catch (error) {
             next(error);
-        }
-    };
-    addRecipesController = async (req, resp, next) => {
-        const idRecipes = req.params.id;
-        const { id } = req.tokenPayload;
-        const findUser = (await User.findOne({
-            id,
-        }));
-        if (findUser === null || findUser === undefined) {
-            next('UserError');
-            return;
-        }
-        if (findUser.recipes.some((item) => item.toString() === idRecipes)) {
-            const error = new Error('Recipes already added to favorites');
-            error.name = 'ValidationError';
-            next(error);
-        }
-        else {
-            findUser.recipes.push(idRecipes);
-            findUser.save();
-            resp.setHeader('Content-type', 'application/json');
-            resp.status(201);
-            resp.send(JSON.stringify(findUser));
         }
     };
 }

@@ -1,4 +1,4 @@
-import { iUser } from '../controllers/user.controller';
+import { iUser } from '../interfaces/interfaces.models';
 import { iIngredient, iRecipe } from '../interfaces/interfaces.models';
 import { Ingredient } from '../models/ingredient.model';
 import { Recipe } from '../models/recipe.model';
@@ -11,14 +11,14 @@ let aUsers: Array<iUser> = [
     {
         userName: 'Sergio',
         email: 'sergioh@gmail.com',
-        passwd: '1254',
+        password: '1254',
         avatar: 'String',
         recipes: [],
     },
     {
         userName: 'Ango',
         email: 'anguitoh@gmail.com',
-        passwd: '1254',
+        password: '1254',
         avatar: 'String',
         recipes: [],
     },
@@ -65,7 +65,7 @@ export const initDB = async () => {
     (aUsers as any) = await Promise.all(
         aUsers.map(async (item) => ({
             ...item,
-            passwd: await encrypt(item.passwd),
+            password: await encrypt(item.password),
         }))
     );
 
@@ -87,7 +87,7 @@ export const initDB = async () => {
         aUsers.map(async (item) => ({
             ...item,
             recipes: [recipes[0].id],
-            passwd: await encrypt(item.passwd),
+            password: await encrypt(item.password),
         }))
     );
     const users = await User.insertMany(aUsers);
