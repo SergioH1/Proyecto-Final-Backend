@@ -23,8 +23,9 @@ userRouter.patch(
     userRequiredForChanges,
     userController.patchController
 );
-// userRouter.patch(
-//     '/addrecipes',
-//     userRequiredForChanges,
-//     userController.addRecipesController
-// );
+userRouter.patch(
+    '/addrecipes/:id',
+
+    loginRequired,
+    userController.addRecipesController
+);

@@ -9,8 +9,4 @@ userRouter.post('/', userController.postController);
 userRouter.post('/login', userController.loginController);
 userRouter.delete('/:id', loginRequired, userRequiredForChanges, userController.deleteController);
 userRouter.patch('/:id', loginRequired, userRequiredForChanges, userController.patchController);
-// userRouter.patch(
-//     '/addrecipes',
-//     userRequiredForChanges,
-//     userController.addRecipesController
-// );
+userRouter.patch('/addrecipes/:id', loginRequired, userController.addRecipesController);

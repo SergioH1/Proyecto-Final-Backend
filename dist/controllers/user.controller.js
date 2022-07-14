@@ -81,4 +81,33 @@ export class UserController {
             next(error);
         }
     };
+    addRecipesController = async (req, resp, next) => {
+        try {
+            const idRecipe = req.params.id;
+            const { id } = req.tokenPayload;
+            let findUser = (await User.findOne({
+                id,
+            }).populate('recipes'));
+            if (findUser === null) {
+                next('UserError');
+                return;
+            }
+            if (findUser.recipes.some((item) => item._id.toString() === idRecipe)) {
+                resp.send(JSON.stringify(findUser));
+                const error = new Error('Workout already added to favorites');
+                error.name = 'ValidationError';
+                next(error);
+            }
+            else {
+                findUser.recipes.push(idRecipe);
+                findUser = await (await findUser.save()).populate('recipes');
+                resp.setHeader('Content-type', 'application/json');
+                resp.status(201);
+                resp.send(JSON.stringify(findUser));
+            }
+        }
+        catch (error) {
+            next('RangeError');
+        }
+    };
 }

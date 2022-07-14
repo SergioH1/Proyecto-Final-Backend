@@ -17,7 +17,7 @@ ingredientSchema.set('toJSON', {
 export const Ingredient = mongoose.model('Ingredient', ingredientSchema);
 
 export function insertManyIngredient() {
-    Ingredient.insertMany([{ name: 'cerveza', category: 'Bebida' }])
+    Ingredient.insertMany([{ name: 'Jamon', category: 'Carne' }])
         .then(function () {
             console.log('Data inserted'); // Success
         })
