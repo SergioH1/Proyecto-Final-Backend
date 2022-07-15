@@ -5,6 +5,7 @@ import { loginRequired } from '../middlewares/login.required.js';
 export const userController = new UserController();
 export const userRouter = Router();
 userRouter.get('/:id', userController.getController);
+userRouter.post('/token', loginRequired, userController.getControllerByToken);
 userRouter.post('/', userController.postController);
 userRouter.post('/login', userController.loginController);
 userRouter.delete('/:id', loginRequired, userRequiredForChanges, userController.deleteController);

@@ -1,6 +1,26 @@
 import * as aut from '../services/authorization.js';
 import { User } from '../models/user.model.js';
 export class UserController {
+    getControllerByToken = async (req, resp, next) => {
+        resp.setHeader('Content-type', 'application/json');
+        let user;
+        req;
+        console.log(req.tokenPayload, 'soy un token');
+        try {
+            user = await User.findById(req.tokenPayload.id).populate('recipes');
+        }
+        catch (error) {
+            next(error);
+            return;
+        }
+        if (user) {
+            resp.send(JSON.stringify(user));
+        }
+        else {
+            resp.status(404);
+            resp.send(JSON.stringify({}));
+        }
+    };
     getController = async (req, resp, next) => {
         resp.setHeader('Content-type', 'application/json');
         let user;
@@ -37,7 +57,7 @@ export class UserController {
     loginController = async (req, resp, next) => {
         const findUser = await User.findOne({
             email: req.body.email,
-        });
+        }).populate('recipes');
         if (!findUser ||
             !(await aut.compare(req.body.password, findUser.password))) {
             const error = new Error('Invalid user or password');
@@ -52,7 +72,7 @@ export class UserController {
         const token = aut.createToken(tokenPayLoad);
         resp.setHeader('Content-type', 'application/json');
         resp.status(201);
-        resp.send(JSON.stringify({ token, id: findUser.id }));
+        resp.send(JSON.stringify({ token, user: findUser }));
     };
     deleteController = async (req, resp, next) => {
         try {
@@ -85,9 +105,7 @@ export class UserController {
         try {
             const idRecipe = req.params.id;
             const { id } = req.tokenPayload;
-            let findUser = (await User.findOne({
-                id,
-            }).populate('recipes'));
+            let findUser = (await User.findById(id).populate('recipes'));
             if (findUser === null) {
                 next('UserError');
                 return;

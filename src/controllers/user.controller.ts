@@ -14,6 +14,31 @@ export interface iUser {
     recipes?: Array<string>;
 }
 export class UserController {
+    getControllerByToken = async (
+        req: Request,
+        resp: Response,
+        next: NextFunction
+    ) => {
+        resp.setHeader('Content-type', 'application/json');
+        let user;
+        req as ExtRequest;
+        console.log((req as ExtRequest).tokenPayload, 'soy un token');
+        try {
+            user = await User.findById(
+                (req as ExtRequest).tokenPayload.id
+            ).populate('recipes');
+        } catch (error) {
+            next(error);
+            return;
+        }
+
+        if (user) {
+            resp.send(JSON.stringify(user));
+        } else {
+            resp.status(404);
+            resp.send(JSON.stringify({}));
+        }
+    };
     getController = async (
         req: Request,
         resp: Response,
@@ -62,7 +87,7 @@ export class UserController {
     ) => {
         const findUser: any = await User.findOne({
             email: req.body.email,
-        });
+        }).populate('recipes');
 
         if (
             !findUser ||
@@ -82,7 +107,7 @@ export class UserController {
 
         resp.setHeader('Content-type', 'application/json');
         resp.status(201);
-        resp.send(JSON.stringify({ token, id: findUser.id }));
+        resp.send(JSON.stringify({ token, user: findUser }));
     };
 
     deleteController = async (
@@ -134,9 +159,9 @@ export class UserController {
             const idRecipe = req.params.id;
             const { id } = (req as ExtRequest).tokenPayload;
 
-            let findUser: any = (await User.findOne({
-                id,
-            }).populate('recipes')) as HydratedDocument<iUser>;
+            let findUser: any = (await User.findById(id).populate(
+                'recipes'
+            )) as HydratedDocument<iUser>;
             if (findUser === null) {
                 next('UserError');
                 return;
