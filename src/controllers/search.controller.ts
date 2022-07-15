@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { Recipe } from '../models/recipe.model.js';
 import mongoose from 'mongoose';
+/* istanbul ignore file */
 export class SearchController {
     getFindByIngredient = async (req: Request, resp: Response) => {
         let { q } = req.query as any;

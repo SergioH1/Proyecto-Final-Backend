@@ -16,7 +16,7 @@ describe('When the function encrypt is called', () => {
         bcrypt.hash = jest.fn();
         await encrypt(source);
 
-        expect(bcrypt.hash).toBeCalledTimes(0);
+        expect(bcrypt.hash).toBeCalledTimes(1);
     });
 });
 describe('When the function compare is called', () => {

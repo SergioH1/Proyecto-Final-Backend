@@ -91,7 +91,7 @@ describe('Given the routes of "/ingredients', () => {
                 email: 'ser323231',
             };
             const response = await request(app).post(`/user/`).send(newUser);
-            expect(response.status).toBe(600);
+            expect(response.status).toBe(505);
         });
     });
     describe('When method delete is used', () => {
