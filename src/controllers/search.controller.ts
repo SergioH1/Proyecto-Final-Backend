@@ -38,6 +38,15 @@ export class SearchController {
         resp.status(202);
         resp.send(Array.from(recipes));
     };
+    getFindByRecipes = async (req: Request, resp: Response) => {
+        const recipes = await Recipe.find({
+            title: { $regex: req.query.q, $options: 'i' },
+        });
+
+        resp.setHeader('Content-type', 'application/json');
+        resp.status(202);
+        resp.send(JSON.stringify(recipes));
+    };
 }
 
 // getFindByIngredient = async (req: Request, resp: Response) => {
@@ -66,15 +75,6 @@ export class SearchController {
 //     });
 // }
 
-// getFindByRecipes = async (req: Request, resp: Response) => {
-//     const recipes = await Recipe.find({
-//         title: { $regex: req.query.q, $options: 'i' },
-//     });
-
-//     resp.setHeader('Content-type', 'application/json');
-//     resp.status(202);
-//     resp.send(JSON.stringify(recipes));
-// };
 // //     };
 //     };
 // }
