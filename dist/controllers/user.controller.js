@@ -76,7 +76,7 @@ export class UserController {
     };
     deleteController = async (req, resp, next) => {
         try {
-            const deletedItem = await User.findByIdAndDelete(req.tokenPayload.id);
+            const deletedItem = await User.findByIdAndDelete(req.params._id);
             resp.status(202);
             resp.send(JSON.stringify(deletedItem));
         }

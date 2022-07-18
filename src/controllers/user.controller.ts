@@ -116,9 +116,8 @@ export class UserController {
         next: NextFunction
     ) => {
         try {
-            const deletedItem = await User.findByIdAndDelete(
-                (req as unknown as ExtRequest).tokenPayload.id
-            );
+            const deletedItem = await User.findByIdAndDelete(req.params._id);
+
             resp.status(202);
             resp.send(JSON.stringify(deletedItem));
         } catch (error) {
