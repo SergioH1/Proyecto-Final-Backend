@@ -5,7 +5,7 @@ import request from 'supertest';
 import { app } from '../app';
 import { mongooseConnect } from '../db/mongoose';
 import * as aut from '../services/authorization';
-import { iUser } from '../controllers/user.controller';
+import { iUser } from '../interfaces/interfaces.models';
 
 describe('Given the routes of "/ingredients', () => {
     let data: { [key: string]: Array<any> };
@@ -78,7 +78,7 @@ describe('Given the routes of "/ingredients', () => {
         test('them status should be 200', async () => {
             const newUser: Partial<iUser> = {
                 userName: 'troll',
-                passwd: '123',
+                password: '123',
                 email: 'serga21@gaasfgsa.com',
             };
             const response = await request(app).post(`/user/`).send(newUser);
@@ -87,11 +87,11 @@ describe('Given the routes of "/ingredients', () => {
         test('them status should be 403', async () => {
             const newUser: Partial<iUser> = {
                 userName: 'Sergio',
-                passwd: '123',
-                email: 'serga21@gaasfgsa.com',
+                password: '123',
+                email: 'ser323231',
             };
             const response = await request(app).post(`/user/`).send(newUser);
-            expect(response.status).toBe(500);
+            expect(response.status).toBe(505);
         });
     });
     describe('When method delete is used', () => {
@@ -115,10 +115,10 @@ describe('Given the routes of "/ingredients', () => {
 
             expect(response.statusCode).toBe(404);
         });
-        test('if userName and passwd is ', async () => {
+        test('if userName and password is ', async () => {
             const user: Partial<iUser> = {
-                userName: 'troll',
-                passwd: '123',
+                email: 'serga21@gaasfgsa.com',
+                password: '123',
             };
             const response = await request(app).post(`/user/login`).send(user);
 

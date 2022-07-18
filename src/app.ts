@@ -15,10 +15,9 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/ingredient/', ingredientRouter);
-app.use('/ingredients/', ingredientRouter);
+
 app.use('/recipe/', recipeRouter);
-app.use('/recipes/', recipeRouter);
 app.use('/user/', userRouter);
 app.use('/search/', searchRouter);
+
 app.use(errorControl);
-// app.use('/testingFind', findByIngredientRouter);

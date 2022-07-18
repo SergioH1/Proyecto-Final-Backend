@@ -8,7 +8,7 @@ import { ExtRequest } from '../interfaces/interfaces.models';
 jest.mock('../services/authorization.js');
 describe('Given a instantiated controller Usercontroller', () => {
     let controller: UserController;
-    let req: Partial<Request>;
+    let req: Partial<ExtRequest>;
     let resp: Partial<Response>;
     let next: Partial<NextFunction>;
 
@@ -37,6 +37,19 @@ describe('Given a instantiated controller Usercontroller', () => {
             expect(next).toHaveBeenCalled();
         });
     });
+    test('Then should be call next function', async () => {
+        User.findById = jest.fn().mockReturnValue({
+            populate: jest.fn().mockResolvedValue(undefined),
+        });
+
+        await controller.getController(
+            req as Request,
+            resp as Response,
+            next as NextFunction
+        );
+
+        expect(resp.send).toHaveBeenCalled();
+    });
     describe('When method getController is called with a existing id', () => {
         test('Then resp.send should be called', async () => {
             User.findById = jest.fn().mockReturnValue({
@@ -56,7 +69,7 @@ describe('Given a instantiated controller Usercontroller', () => {
     describe('When method getController is called with a non existing id', () => {
         test('Then resp.send should be called', async () => {
             User.findById = jest.fn().mockReturnValue({
-                populate: jest.fn().mockResolvedValue(null),
+                populate: jest.fn().mockResolvedValue({}),
             });
             await controller.getController(
                 req as Request,
@@ -66,7 +79,35 @@ describe('Given a instantiated controller Usercontroller', () => {
             expect(resp.send).toHaveBeenCalledWith(JSON.stringify({}));
         });
     });
+    describe('When method getControllerByToken is called with a existing id', () => {
+        test('Then resp.send should be called', async () => {
+            req = {
+                tokenPayload: { id: '12' },
+            };
+            User.findById = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValue({ user: 'test' }),
+            });
+            await controller.getControllerByToken(
+                req as ExtRequest,
+                resp as Response,
+                next as NextFunction
+            );
+            expect(resp.send).toHaveBeenCalledWith(
+                JSON.stringify({ user: 'test' })
+            );
+        });
+    });
 
+    describe('When method getControllerByToken is called with a non existing id', () => {
+        test('Then resp.send should be called', async () => {
+            await controller.getControllerByToken(
+                req as Request,
+                resp as Response,
+                next as NextFunction
+            );
+            expect(next).toHaveBeenCalled();
+        });
+    });
     describe('When method postController is called', () => {
         test('Then resp.send should be called', async () => {
             await controller.postController(
@@ -103,7 +144,9 @@ describe('Given a instantiated controller Usercontroller', () => {
             };
             (aut.compare as jest.Mock).mockResolvedValue(false);
             (aut.createToken as jest.Mock).mockResolvedValue('');
-            User.findOne = jest.fn().mockReturnValue({ name: req.body.name });
+            User.findOne = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValue({ recipes: 'test' }),
+            });
             await controller.loginController(
                 req as Request,
                 resp as Response,
@@ -121,7 +164,9 @@ describe('Given a instantiated controller Usercontroller', () => {
         };
         (aut.compare as jest.Mock).mockResolvedValue(true);
         (aut.createToken as jest.Mock).mockResolvedValue('');
-        User.findOne = jest.fn().mockReturnValue({ name: req.body.name });
+        User.findOne = jest.fn().mockReturnValue({
+            populate: jest.fn().mockResolvedValue({ name: null }),
+        });
         await controller.loginController(
             req as Request,
             resp as Response,

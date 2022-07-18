@@ -6,4 +6,4 @@ export const searchController = new SearchController();
 export const searchRouter = Router();
 
 searchRouter.get('/', searchController.getFindByIngredient);
-searchRouter.get('/recipes', searchController.getFindByRecipes);
+// searchRouter.get('/recipes', searchController.getFindByRecipes);

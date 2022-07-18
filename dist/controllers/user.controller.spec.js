@@ -29,6 +29,13 @@ describe('Given a instantiated controller Usercontroller', () => {
             expect(next).toHaveBeenCalled();
         });
     });
+    test('Then should be call next function', async () => {
+        User.findById = jest.fn().mockReturnValue({
+            populate: jest.fn().mockResolvedValue(undefined),
+        });
+        await controller.getController(req, resp, next);
+        expect(resp.send).toHaveBeenCalled();
+    });
     describe('When method getController is called with a existing id', () => {
         test('Then resp.send should be called', async () => {
             User.findById = jest.fn().mockReturnValue({
@@ -41,10 +48,28 @@ describe('Given a instantiated controller Usercontroller', () => {
     describe('When method getController is called with a non existing id', () => {
         test('Then resp.send should be called', async () => {
             User.findById = jest.fn().mockReturnValue({
-                populate: jest.fn().mockResolvedValue(null),
+                populate: jest.fn().mockResolvedValue({}),
             });
             await controller.getController(req, resp, next);
             expect(resp.send).toHaveBeenCalledWith(JSON.stringify({}));
+        });
+    });
+    describe('When method getControllerByToken is called with a existing id', () => {
+        test('Then resp.send should be called', async () => {
+            req = {
+                tokenPayload: { id: '12' },
+            };
+            User.findById = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValue({ user: 'test' }),
+            });
+            await controller.getControllerByToken(req, resp, next);
+            expect(resp.send).toHaveBeenCalledWith(JSON.stringify({ user: 'test' }));
+        });
+    });
+    describe('When method getControllerByToken is called with a non existing id', () => {
+        test('Then resp.send should be called', async () => {
+            await controller.getControllerByToken(req, resp, next);
+            expect(next).toHaveBeenCalled();
         });
     });
     describe('When method postController is called', () => {
@@ -75,7 +100,9 @@ describe('Given a instantiated controller Usercontroller', () => {
             };
             aut.compare.mockResolvedValue(false);
             aut.createToken.mockResolvedValue('');
-            User.findOne = jest.fn().mockReturnValue({ name: req.body.name });
+            User.findOne = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValue({ recipes: 'test' }),
+            });
             await controller.loginController(req, resp, next);
             expect(next).toHaveBeenCalled();
         });
@@ -89,7 +116,9 @@ describe('Given a instantiated controller Usercontroller', () => {
         };
         aut.compare.mockResolvedValue(true);
         aut.createToken.mockResolvedValue('');
-        User.findOne = jest.fn().mockReturnValue({ name: req.body.name });
+        User.findOne = jest.fn().mockReturnValue({
+            populate: jest.fn().mockResolvedValue({ name: null }),
+        });
         await controller.loginController(req, resp, next);
         expect(resp.send).toHaveBeenCalled();
     });
