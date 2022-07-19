@@ -128,4 +128,18 @@ export class UserController {
             next('RangeError');
         }
     };
+    deleteRecipesController = async (req, resp, next) => {
+        const idRecipe = req.params.id;
+        const { id } = req.tokenPayload;
+        const findUser = (await User.findById(id).populate('recipes'));
+        if (findUser === null) {
+            next('UserError');
+            return;
+        }
+        findUser.recipes = findUser.recipes.filter((item) => item._id.toString() !== idRecipe);
+        findUser.save();
+        resp.setHeader('Content-type', 'application/json');
+        resp.status(201);
+        resp.send(JSON.stringify(findUser));
+    };
 }

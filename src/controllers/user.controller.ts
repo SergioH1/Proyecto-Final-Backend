@@ -185,4 +185,26 @@ export class UserController {
             next('RangeError');
         }
     };
+    deleteRecipesController = async (
+        req: Request,
+        resp: Response,
+        next: NextFunction
+    ) => {
+        const idRecipe = req.params.id;
+        const { id } = (req as ExtRequest).tokenPayload;
+        const findUser: HydratedDocument<iUser> = (await User.findById(
+            id
+        ).populate('recipes')) as HydratedDocument<iUser>;
+        if (findUser === null) {
+            next('UserError');
+            return;
+        }
+        findUser.recipes = (findUser as any).recipes.filter(
+            (item: any) => item._id.toString() !== idRecipe
+        );
+        findUser.save();
+        resp.setHeader('Content-type', 'application/json');
+        resp.status(201);
+        resp.send(JSON.stringify(findUser));
+    };
 }

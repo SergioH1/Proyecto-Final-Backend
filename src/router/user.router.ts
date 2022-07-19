@@ -29,3 +29,8 @@ userRouter.patch(
     loginRequired,
     userController.addRecipesController
 );
+userRouter.patch(
+    '/deleterecipes/:id',
+    loginRequired,
+    userController.deleteRecipesController
+);

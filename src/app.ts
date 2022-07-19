@@ -6,7 +6,6 @@ import { recipeRouter } from './router/recipes.router.js';
 import { userRouter } from './router/user.router.js';
 import { errorControl } from './middlewares/error.controller.js';
 import { searchRouter } from './router/search.router.js';
-// import { findByIngredientRouter } from './router/findBy.router.js';
 
 export const app = express();
 
@@ -18,6 +17,6 @@ app.use('/ingredient/', ingredientRouter);
 
 app.use('/recipe/', recipeRouter);
 app.use('/user/', userRouter);
-app.use('/search/', searchRouter);
+app.use('/search', searchRouter);
 
 app.use(errorControl);
