@@ -181,7 +181,7 @@ describe('Given a instantiated controller Usercontroller', () => {
                 resp as Response,
                 next as NextFunction
             );
-            expect(next).toHaveBeenCalled();
+            expect(resp.send).toHaveBeenCalled();
         });
         test('Them resp.status  is called with 202', async () => {
             (req as Partial<ExtRequest>) = {

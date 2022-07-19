@@ -125,7 +125,7 @@ describe('Given a instantiated controller Usercontroller', () => {
     describe('When method delete controller is called', () => {
         test('Them next is called', async () => {
             await controller.deleteController(req, resp, next);
-            expect(next).toHaveBeenCalled();
+            expect(resp.send).toHaveBeenCalled();
         });
         test('Them resp.status  is called with 202', async () => {
             req = {
