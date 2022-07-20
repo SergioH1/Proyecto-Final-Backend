@@ -9,7 +9,7 @@ export class SearchController {
         q;
         let recipes: Array<mongoose.Document> = [];
         if (typeof q !== 'string' && q !== undefined) {
-            for await (const [value] of q.entries()) {
+            for await (const [index, value] of q.entries()) {
                 const queryResult = await Recipe.find({
                     keywords: {
                         $regex: value,
