@@ -5,7 +5,6 @@ export class UserController {
         resp.setHeader('Content-type', 'application/json');
         let user;
         req;
-        console.log(req.tokenPayload, 'soy un token');
         try {
             user = await User.findById(req.tokenPayload.id).populate('recipes');
         }
@@ -46,7 +45,6 @@ export class UserController {
             newUser = await User.create(req.body);
         }
         catch (error) {
-            console.log(error);
             next(RangeError);
             return;
         }
@@ -74,16 +72,10 @@ export class UserController {
         resp.status(201);
         resp.send(JSON.stringify({ token, user: findUser }));
     };
-    deleteController = async (req, resp, next) => {
-        try {
-            const deletedItem = await User.findByIdAndDelete(req.params._id);
-            resp.status(202);
-            resp.send(JSON.stringify(deletedItem));
-        }
-        catch (error) {
-            next(error);
-            return;
-        }
+    deleteController = async (req, resp) => {
+        const deletedItem = await User.findByIdAndDelete(req.params._id);
+        resp.status(202);
+        resp.send(JSON.stringify(deletedItem));
     };
     patchController = async (req, resp, next) => {
         try {

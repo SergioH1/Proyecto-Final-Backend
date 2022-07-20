@@ -10,7 +10,7 @@ describe('Given a instantiated controller Usercontroller', () => {
     let next;
     beforeEach(() => {
         req = {
-            params: { id: '123456789012345678901234' },
+            params: { id: '62b5d4943bc55ff0124f6c1d' },
         };
         resp = {
             setHeader: jest.fn(),
@@ -31,24 +31,15 @@ describe('Given a instantiated controller Usercontroller', () => {
     });
     test('Then should be call next function', async () => {
         User.findById = jest.fn().mockReturnValue({
-            populate: jest.fn().mockResolvedValue(undefined),
+            populate: jest.fn().mockResolvedValueOnce(undefined),
         });
         await controller.getController(req, resp, next);
         expect(resp.send).toHaveBeenCalled();
     });
-    describe('When method getController is called with a existing id', () => {
-        test('Then resp.send should be called', async () => {
-            User.findById = jest.fn().mockReturnValue({
-                populate: jest.fn().mockResolvedValue({ user: 'test' }),
-            });
-            await controller.getController(req, resp, next);
-            expect(resp.send).toHaveBeenCalledWith(JSON.stringify({ user: 'test' }));
-        });
-    });
     describe('When method getController is called with a non existing id', () => {
         test('Then resp.send should be called', async () => {
             User.findById = jest.fn().mockReturnValue({
-                populate: jest.fn().mockResolvedValue({}),
+                populate: jest.fn().mockResolvedValueOnce({}),
             });
             await controller.getController(req, resp, next);
             expect(resp.send).toHaveBeenCalledWith(JSON.stringify({}));
@@ -60,7 +51,7 @@ describe('Given a instantiated controller Usercontroller', () => {
                 tokenPayload: { id: '12' },
             };
             User.findById = jest.fn().mockReturnValue({
-                populate: jest.fn().mockResolvedValue({ user: 'test' }),
+                populate: jest.fn().mockResolvedValueOnce({ user: 'test' }),
             });
             await controller.getControllerByToken(req, resp, next);
             expect(resp.send).toHaveBeenCalledWith(JSON.stringify({ user: 'test' }));
@@ -85,7 +76,7 @@ describe('Given a instantiated controller Usercontroller', () => {
                     password: '5451542',
                 },
             };
-            User.create = jest.fn().mockResolvedValue(req.body);
+            User.create = jest.fn().mockResolvedValueOnce(req.body);
             await controller.postController(req, resp, next);
             expect(resp.status).toHaveBeenCalledWith(201);
         });
@@ -98,10 +89,10 @@ describe('Given a instantiated controller Usercontroller', () => {
                     name: 'Sergio',
                 },
             };
-            aut.compare.mockResolvedValue(false);
-            aut.createToken.mockResolvedValue('');
+            aut.compare.mockResolvedValueOnce(false);
+            aut.createToken.mockResolvedValueOnce('');
             User.findOne = jest.fn().mockReturnValue({
-                populate: jest.fn().mockResolvedValue({ recipes: 'test' }),
+                populate: jest.fn().mockResolvedValueOnce({ recipes: 'test' }),
             });
             await controller.loginController(req, resp, next);
             expect(next).toHaveBeenCalled();
@@ -114,27 +105,23 @@ describe('Given a instantiated controller Usercontroller', () => {
                 name: 'Sergio',
             },
         };
-        aut.compare.mockResolvedValue(true);
-        aut.createToken.mockResolvedValue('');
+        aut.compare.mockResolvedValueOnce(true);
+        aut.createToken.mockResolvedValueOnce('');
         User.findOne = jest.fn().mockReturnValue({
-            populate: jest.fn().mockResolvedValue({ name: null }),
+            populate: jest.fn().mockResolvedValueOnce({ name: null }),
         });
         await controller.loginController(req, resp, next);
         expect(resp.send).toHaveBeenCalled();
     });
     describe('When method delete controller is called', () => {
-        test('Them next is called', async () => {
-            await controller.deleteController(req, resp, next);
-            expect(resp.send).toHaveBeenCalled();
-        });
         test('Them resp.status  is called with 202', async () => {
             req = {
                 params: { id: '123456789012345678901234' },
                 tokenPayload: { _id: '21331' },
             };
             let findUser = '21331';
-            User.findById = jest.fn().mockResolvedValue(findUser);
-            await controller.deleteController(req, resp, next);
+            User.findById = jest.fn().mockResolvedValueOnce(findUser);
+            await controller.deleteController(req, resp);
             expect(resp.status).toHaveBeenCalled();
         });
     });
@@ -146,7 +133,7 @@ describe('Given a instantiated controller Usercontroller', () => {
                 body: { name: 'sergio' },
             };
             const findUser = '21331';
-            User.findByIdAndUpdate = jest.fn().mockResolvedValue(findUser);
+            User.findByIdAndUpdate = jest.fn().mockResolvedValueOnce(findUser);
             await controller.patchController(req, resp, next);
             expect(resp.send).toHaveBeenCalled();
         });
@@ -163,5 +150,123 @@ describe('Given a instantiated controller Usercontroller', () => {
         };
         await controller.patchController(req, resp, next);
         expect(next).toHaveBeenCalled();
+    });
+    test('Then should be call rest.send wit', async () => {
+        User.findById = jest.fn().mockReturnValue({
+            populate: jest.fn().mockResolvedValueOnce(undefined),
+        });
+        await controller.getControllerByToken(req, resp, next);
+        expect(next).toHaveBeenCalled();
+    });
+    describe('When method addRecipesController is called', () => {
+        test('And response is error, then next should be called', async () => {
+            await controller.addRecipesController(req, resp, next);
+            expect(next).toHaveBeenCalled();
+        });
+        test('And response is ok, then resp.send should be called', async () => {
+            req = {
+                params: { id: '62b5d4943bc55ff0124f6c1d' },
+                tokenPayload: {
+                    id: '62b9e534a202c8a096e0d7ba',
+                },
+            };
+            User.findById = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValueOnce(null),
+            });
+            await controller.addRecipesController(req, resp, next);
+            expect(next).toHaveBeenCalled();
+        });
+        test('And response is ok, then resp.send should be called', async () => {
+            req = {
+                params: { id: '62b5d4943bc55ff0124f6c1d' },
+                tokenPayload: {
+                    id: '62b9e534a202c8a096e0d7ba',
+                },
+            };
+            User.findById = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValueOnce(false),
+            });
+            await controller.addRecipesController(req, resp, next);
+            expect(next).toHaveBeenCalled();
+        });
+    });
+    describe('When method addrecipecontroller is called', () => {
+        test('And response is error, then next should be called', async () => {
+            req = {
+                params: { id: '62b5d4943bc55ff0124f6c1d' },
+                tokenPayload: {
+                    id: '62b5d4943bc55ff0124f6c1d',
+                },
+                body: {
+                    password: '',
+                },
+            };
+            const mockResult = {
+                id: '62b5d4943bc55ff0124f6c1e',
+                recipes: [],
+                save: jest.fn().mockReturnValue({
+                    populate: jest.fn(),
+                }),
+            };
+            User.findById = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValueOnce(mockResult),
+            });
+            await controller.addRecipesController(req, resp, next);
+            expect(resp.send).toHaveBeenCalled();
+        });
+        test('And response is ok, then res.send should be called', async () => {
+            req = {
+                params: { id: '62b5d4943bc55ff0124f6c1d' },
+                tokenPayload: {
+                    id: '62b5d4943bc55ff0124f6c1d',
+                },
+                body: {
+                    password: '',
+                },
+            };
+            const mockResult = {
+                id: '62b5d4943bc55ff0124f6c1d',
+                recipes: [{ _id: '62b5d4943bc55ff0124f6c1d' }],
+                save: jest.fn().mockReturnValue({
+                    populate: jest.fn(),
+                }),
+            };
+            User.findById = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValueOnce(mockResult),
+            });
+            await controller.addRecipesController(req, resp, next);
+            expect(resp.send).toHaveBeenCalled();
+        });
+    });
+    describe('When method deleterecipecontroller is called', () => {
+        test('And response is error, then next should be called', async () => {
+            req = {
+                params: { id: '62b5d4943bc55ff0124f6c1d' },
+                tokenPayload: {
+                    id: '62b5d4943bc55ff0124f6c1d',
+                },
+            };
+            User.findById = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValueOnce(null),
+            });
+            await controller.deleteRecipesController(req, resp, next);
+            expect(next).toHaveBeenCalled();
+        });
+        test('And response is valid, then resp.send should be called', async () => {
+            req = {
+                params: { id: '62b5d4943bc55ff0124f6c1d' },
+                tokenPayload: {
+                    _id: '62b5d4943bc55ff0124f6c1d',
+                },
+            };
+            User.findById = jest.fn().mockReturnValue({
+                populate: jest.fn().mockResolvedValueOnce({
+                    recipes: [{ _id: '62b5d4943bc55ff0124f6c1d' }],
+                    save: jest.fn(),
+                }),
+            });
+            await controller.deleteRecipesController(req, resp, next);
+            expect(resp.send).toHaveBeenCalled();
+        });
     });
 });

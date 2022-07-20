@@ -22,7 +22,7 @@ export class UserController {
         resp.setHeader('Content-type', 'application/json');
         let user;
         req as ExtRequest;
-        console.log((req as ExtRequest).tokenPayload, 'soy un token');
+
         try {
             user = await User.findById(
                 (req as ExtRequest).tokenPayload.id
@@ -71,7 +71,6 @@ export class UserController {
             req.body.password = await aut.encrypt(req.body.password);
             newUser = await User.create(req.body);
         } catch (error) {
-            console.log(error);
             next(RangeError);
             return;
         }
@@ -110,20 +109,11 @@ export class UserController {
         resp.send(JSON.stringify({ token, user: findUser }));
     };
 
-    deleteController = async (
-        req: Request,
-        resp: Response,
-        next: NextFunction
-    ) => {
-        try {
-            const deletedItem = await User.findByIdAndDelete(req.params._id);
+    deleteController = async (req: Request, resp: Response) => {
+        const deletedItem = await User.findByIdAndDelete(req.params._id);
 
-            resp.status(202);
-            resp.send(JSON.stringify(deletedItem));
-        } catch (error) {
-            next(error);
-            return;
-        }
+        resp.status(202);
+        resp.send(JSON.stringify(deletedItem));
     };
 
     patchController = async (
