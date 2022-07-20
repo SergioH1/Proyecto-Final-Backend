@@ -11,3 +11,4 @@ userRouter.post('/login', userController.loginController);
 userRouter.delete('/:id', loginRequired, userRequiredForChanges, userController.deleteController);
 userRouter.patch('/:id', loginRequired, userRequiredForChanges, userController.patchController);
 userRouter.patch('/addrecipes/:id', loginRequired, userController.addRecipesController);
+userRouter.patch('/deleterecipes/:id', loginRequired, userController.deleteRecipesController);
