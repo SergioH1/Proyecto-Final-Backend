@@ -7,8 +7,9 @@
     "scripts": {
         "start": "tsc --watch",
         "start:build": "cross-env PORT=3700 nodemon ./dist/index.js",
-        "test": " jest --watchAll --coverage --passWithNoTests",
-        "prepare": "husky install"
+        "test": " cross-env jest --watchAll --coverage --runInBand ",
+        "prepare": "husky install",
+        "test:prod": " cross-env jest --watchAll --coverage --runInBand  --watchAll=false --detectOpenHandles"
     },
     "author": "",
     "license": "ISC",

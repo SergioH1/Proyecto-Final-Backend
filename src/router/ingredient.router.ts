@@ -7,6 +7,6 @@ export const ingredientRouter = Router();
 
 ingredientRouter.get('/', ingredientController.getAllController);
 ingredientRouter.get('/:id', ingredientController.getController);
-ingredientRouter.post('/', ingredientController.postController);
-ingredientRouter.patch('/:id', ingredientController.patchController);
-ingredientRouter.delete('/:id', ingredientController.deleteController);
+// ingredientRouter.post('/', ingredientController.postController);
+// ingredientRouter.patch('/:id', ingredientController.patchController);
+// ingredientRouter.delete('/:id', ingredientController.deleteController);

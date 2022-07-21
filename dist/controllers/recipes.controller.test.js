@@ -20,6 +20,9 @@ describe('Given a instantiated Controller Recipes Controller', () => {
         req = {
             params: { id: '62b5d4943bc55ff0124f6c1d' },
             body: [{ ingredient: 'alga' }],
+            query: {
+                q: 'algo',
+            },
         };
         resp = {
             setHeader: jest.fn(),
@@ -76,7 +79,7 @@ describe('Given a instantiated Controller Recipes Controller', () => {
     describe('When metodhod patchOnlykeywordController is called', () => {
         test('them in success resp.status with 202', async () => {
             mockModel.findById = jest.fn().mockResolvedValue({
-                keywords: ['pollo'],
+                keyword: ['pollo'],
                 save: jest.fn(),
             });
             await controller.patchOnlyKeywordController(req, resp);

@@ -11,7 +11,7 @@ export const userRequiredForChanges = async (
 
     const userID = (req as unknown as ExtRequest).tokenPayload.id;
     const findUser = await User.findById(req.params.id);
-    if (String(findUser?.id) === String(userID)) {
+    if (String(findUser?._id) === String(userID)) {
         next();
     } else {
         const error = new Error();

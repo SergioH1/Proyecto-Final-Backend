@@ -1,4 +1,3 @@
-import { Recipe } from '../models/recipe.model.js';
 // import { iRecipe } from '../interfaces/interfaces.models.js';
 import { MongooseController } from './mongoose.controller.js';
 export class RecipesController extends MongooseController {
@@ -43,8 +42,8 @@ export class RecipesController extends MongooseController {
     };
     patchOnlyIngredientController = async (req, resp) => {
         let recipe;
-        recipe = await this.model.findById(req.params.id);
-        recipe.ingredients.push(req.body);
+        recipe = (await this.model.findById(req.params.id));
+        recipe.ingredients.push(req.body.ingredient);
         recipe.save();
         resp.setHeader('Content-type', 'application/json');
         resp.end(JSON.stringify(recipe));
@@ -52,18 +51,11 @@ export class RecipesController extends MongooseController {
     };
     patchOnlyKeywordController = async (req, resp) => {
         let recipe;
-        recipe = await this.model.findById(req.params.id);
-        recipe.keywords.push(req.body);
+        recipe = (await this.model.findById(req.params.id));
+        recipe.keyword.push(req.body.keyword);
         recipe.save();
         resp.setHeader('Content-type', 'application/json');
         resp.end(JSON.stringify(recipe));
         resp.status(202);
-    };
-    getFindByIngredient = async (req, resp) => {
-        const recipes = await Recipe.find({
-            ingredients: { $regex: req.query.q, $options: 'i' },
-        });
-        resp.setHeader('Content-type', 'application/json');
-        resp.send(JSON.stringify(recipes));
     };
 }

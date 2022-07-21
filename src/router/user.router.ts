@@ -1,14 +1,16 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller.js';
-import { userRequiredForChanges } from '../middlewares/user-required.js';
-import { loginRequired } from '../middlewares/login-required.js';
+import { userRequiredForChanges } from '../middlewares/user.required.js';
+import { loginRequired } from '../middlewares/login.required.js';
+
 export const userController = new UserController();
 
 export const userRouter = Router();
 
 userRouter.get('/:id', userController.getController);
-
+userRouter.post('/token', loginRequired, userController.getControllerByToken);
 userRouter.post('/', userController.postController);
+
 userRouter.post('/login', userController.loginController);
 userRouter.delete(
     '/:id',
@@ -21,4 +23,14 @@ userRouter.patch(
     loginRequired,
     userRequiredForChanges,
     userController.patchController
+);
+userRouter.patch(
+    '/addrecipes/:id',
+    loginRequired,
+    userController.addRecipesController
+);
+userRouter.patch(
+    '/deleterecipes/:id',
+    loginRequired,
+    userController.deleteRecipesController
 );

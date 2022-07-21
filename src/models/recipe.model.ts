@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { mongooseConnect } from '../db/mongoose.js';
-
+/* istanbul ignore file */
 export enum measure {
     'g' = 'g',
     'ml' = 'ml',
@@ -43,23 +43,101 @@ export const Recipe = mongoose.model('Recipe', recipeSchema);
 export function insertManyRecipe() {
     Recipe.insertMany([
         {
-            title: 'Pollo Seco',
-            origin: 'Global',
-            content:
-                'En un tazón , mezcla el ajo picado, la salsa de soja, las escamas de chille, el aceite de oliva y la miel. Coloca las pechugas en un bol o en una bolsa, vierte el adobo sobre el pollo cubriéndolo bien y si utilizas la bolsa muévelo hasta que se impregne bien. Deja marinar en el frigorífico al menos 1 hora o incluso toda la noche' +
-                'Coloca una sartén al fuego con un poquito de aceite. Dora las pechugas a fuego alto 2 min por cada lado.' +
-                'Baja el fuego a suave, tapa la sartén y cocina otros 10 min. Acuérdate de reducir los tiempos si tus pechugas son más pequeñas.' +
-                'Aparta del fuego y deja reposar tapado otros 7 min' +
-                'Retira la tapa, deja enfriar 5 min para no quemarte y ya puedes partirlo en láminas o en tiras a modo de carne mechada. Guárdalo en un recipiente hermético en la nevera. ',
-            img: 'https://www.recetasconpollo.org/wp-content/uploads/2019/12/filete-pechuga-pollo-plancha--512x341.jpg',
+            title: 'Pasta carbonara de verdad',
+            origin: 'Italian',
+            content: '' + '' + '' + '' + '',
             ingredients: [
                 {
-                    ingredient: '62c3ec220f971e4942ce0f48',
-                    amount: 3,
-                    measure: 'pechugas',
+                    ingredient: '62c441490433eebce469bd9f',
+                    amount: 170,
+                    measure: 'g',
+                },
+                {
+                    ingredient: '62c441490433eebce469bdac',
+                    amount: 4,
+                    measure: 'unit',
+                },
+                {
+                    ingredient: '62c441490433eebce469bda1',
+                    amount: 150,
+                    measure: 'g',
                 },
             ],
-            keywords: ['Pollo'],
+            keywords: ['Huevos', 'Bacon', 'Pasta', 'Parmesano'],
+            img: 'https://imag.bonviveur.com/salsa-carbonara.jpg',
+        },
+        {
+            title: 'Pasta al pesto',
+            origin: 'Italian',
+            content: '' + '' + '' + '' + '',
+            ingredients: [
+                {
+                    ingredient: '62c441490433eebce469bd9f',
+                    amount: 170,
+                    measure: 'g',
+                },
+                {
+                    ingredient: '62c441490433eebce469bdac',
+                    amount: 4,
+                    measure: 'unit',
+                },
+                {
+                    ingredient: '62c441490433eebce469bda1',
+                    amount: 150,
+                    measure: 'g',
+                },
+            ],
+            keywords: ['Pasta', 'Albahaca', 'Ajo', 'Frutos secos'],
+            img: 'https://cdn.businessinsider.es/sites/navi.axelspringer.es/public/styles/2400/public/media/image/2021/11/pasta-pesto-2526561.jpg?itok=OJdi0sEl',
+        },
+        {
+            title: 'Pizza Pepperoni',
+            origin: 'Italian',
+            content: '' + '' + '' + '' + '',
+            ingredients: [
+                {
+                    ingredient: '62c441490433eebce469bd9f',
+                    amount: 170,
+                    measure: 'g',
+                },
+                {
+                    ingredient: '62c441490433eebce469bdac',
+                    amount: 4,
+                    measure: 'unit',
+                },
+                {
+                    ingredient: '62c441490433eebce469bda1',
+                    amount: 150,
+                    measure: 'g',
+                },
+            ],
+            keywords: ['Queso', 'Chorizo', 'Harina', 'Tomate'],
+            img: 'https://i.pinimg.com/originals/a1/35/64/a135643a361418235c8df04b79740745.jpg',
+        },
+
+        {
+            title: 'Rissoto con setas ',
+            origin: 'Italian',
+            content: '' + '' + '' + '' + '',
+            ingredients: [
+                {
+                    ingredient: '62c441490433eebce469bd9f',
+                    amount: 170,
+                    measure: 'g',
+                },
+                {
+                    ingredient: '62c441490433eebce469bdac',
+                    amount: 4,
+                    measure: 'unit',
+                },
+                {
+                    ingredient: '62c441490433eebce469bda1',
+                    amount: 150,
+                    measure: 'g',
+                },
+            ],
+            keywords: ['Arroz', 'Alga Nori', 'Salmon'],
+            img: 'https://unareceta.com/wp-content/uploads/2016/10/risotto-de-setas-sin-nata.jpg',
         },
     ])
         .then(function () {
