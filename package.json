@@ -5,6 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "build": "tsc",
         "start": "tsc --watch",
         "start:build": "cross-env PORT=3700 nodemon ./dist/index.js",
         "test": " cross-env jest --watchAll --coverage --runInBand ",
