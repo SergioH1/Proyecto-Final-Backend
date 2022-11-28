@@ -17,7 +17,7 @@
 ◾ **[PATCH]/user/deleterecipes/:id** ➡ Actualiza la propiedad recipes del usuario borrando la receta recogida por id
 
     ✅ STATUS 200
-## **2. ENDPOINTS Recipes**:
+## ** ENDPOINTS RECIPE**:
 
 ◾ **[GET]/recipe**➡ Devuelve un array con todas las recetas.
 
@@ -35,7 +35,7 @@
 ◾ **[DELETE]/recipe/:id**➡ elimina de la BD la receta por id y devuelve un objeto vacio.
 
     ✅ STATUS: 200
-## **2. ENDPOINTS Ingredients**:
+## **2. ENDPOINTS INGREDIENT**:
 
 ◾ **[GET]/ingredient**➡ Devuelve un array con todos los ingredientes.
 
